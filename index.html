@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZETSU</title>
+<title>ZETSUEDU</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -728,14 +728,14 @@ footer{
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">ZETSU</a>
+  <a class="nav-logo" href="#">ZETSUEDU</a>
   <ul class="nav-links">
     <li><a href="#flow">System</a></li>
     <li><a href="#shop">Shop</a></li>
     <li><a href="#news">Feed</a></li>
     <li><a href="#ref">Refer</a></li>
   </ul>
-  <a class="nav-cta" href="#email">Join Now</a>
+  <a class="nav-cta" id="nav-cta" href="#" onclick="openModal('signup');return false">Join Now</a>
 </nav>
 
 <!-- HERO -->
@@ -743,11 +743,11 @@ footer{
   <div class="hero-grid"></div>
   <div class="hero-inner">
     <p class="hero-eyebrow">The Zetsumetsu Corporation &nbsp;/&nbsp; Est. Detroit</p>
-    <h1 class="hero-title">ZET<span>SU</span></h1>
+    <h1 class="hero-title">ZETSU<span>EDU</span></h1>
     <p class="hero-sub">Sign in. Earn points. Watch ads. Spend. Refer. The loop that rewards every action you take inside the reality.</p>
     <div class="hero-btns" id="hero-btns">
-      <button class="btn-primary" onclick="openAuth('login')">Sign In</button>
-      <button class="btn-ghost" onclick="openAuth('signup')">Join Now</button>
+      <button class="btn-primary" onclick="openModal('login')">Sign In</button>
+      <button class="btn-ghost" onclick="openModal('signup')">Join Now</button>
     </div>
     <div id="hero-points" style="display:none;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center">
       <div style="border:1px solid var(--border-hot);padding:14px 32px;text-align:center">
@@ -763,19 +763,38 @@ footer{
   </div>
 </section>
 
-<!-- ZTAB AUTH MODAL -->
-<div id="ztab-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.88);align-items:center;justify-content:center">
-  <div style="position:relative">
-    <button onclick="closeAuth()" style="position:absolute;top:-36px;right:0;background:none;border:none;color:#666;font-size:18px;cursor:pointer;font-family:monospace;color:#fff">X</button>
-    <iframe src="https://zetsutab.netlify.app/account" style="width:360px;height:620px;border:none;border-radius:14px;display:block"></iframe>
+<!-- AD OVERLAY -->
+<div id="ad-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:32px">
+  <p style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#f2f0eb">EARN POINTS</p>
+  <p style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:#666;text-transform:uppercase">Watch an ad to earn points or skip to continue</p>
+  <div style="display:flex;gap:16px">
+    <button onclick="claimPoints()" style="background:#c8ff00;color:#000;border:none;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">CLAIM POINTS</button>
+    <button onclick="skipAd()" style="background:transparent;color:#f2f0eb;border:1px solid #2e2e2e;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">SKIP</button>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
+  <div style="background:#111;border:1px solid #2e2e2e;padding:48px 40px;width:360px;position:relative">
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;color:#fff">&#x2715;</button>
+    <p id="modal-mode-label" style="font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:32px;letter-spacing:2px">SIGN IN</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input id="auth-email" type="email" placeholder="Email" style="background:#0a0a0a;border:1px solid #2e2e2e;padding:12px 16px;color:#f2f0eb;font-family:'Space Mono',monospace;font-size:12px;outline:none;width:100%;box-sizing:border-box">
+      <input id="auth-pass" type="password" placeholder="Password" style="background:#0a0a0a;border:1px solid #2e2e2e;padding:12px 16px;color:#f2f0eb;font-family:'Space Mono',monospace;font-size:12px;outline:none;width:100%;box-sizing:border-box">
+      <div id="auth-confirm-wrap" style="display:none">
+        <input id="auth-confirm" type="password" placeholder="Confirm Password" style="background:#0a0a0a;border:1px solid #2e2e2e;padding:12px 16px;color:#f2f0eb;font-family:'Space Mono',monospace;font-size:12px;outline:none;width:100%;box-sizing:border-box">
+      </div>
+      <button id="auth-submit" onclick="submitAuth()" style="background:#c8ff00;color:#000;border:none;padding:14px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:8px">SUBMIT</button>
+      <div id="auth-msg" style="font-size:11px;letter-spacing:2px;color:#666;text-align:center;min-height:16px"></div>
+    </div>
   </div>
 </div>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
-    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
-    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
+    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSUEDU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
+    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSUEDU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
   </div>
 </div>
 
@@ -989,7 +1008,7 @@ footer{
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">ZETSU</div>
+  <div class="footer-logo">ZETSUEDU</div>
   <ul class="footer-links">
     <li><a href="#">Shop</a></li>
     <li><a href="https://sigz.netlify.app" target="_blank">SIGZ</a></li>
@@ -1010,90 +1029,105 @@ function copyRef(){
 }
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <script>
-const ZTAB_URL = 'https://zetsu-infinity-auth.netlify.app/.netlify/functions/encode';
-let ztabMode = 'signup';
+const SB_URL = 'https://jqvnrdjrkdjgjbmqmbbl.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impxdm5yZGpya2RqZ2pibXFtYmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTIwOTcsImV4cCI6MjA2NjgyODA5N30.5hMfCI3jir8PK2Aa1Z6w152EGYGSQFlPysk4CaxpmI8';
+let authMode = 'login';
 
-function openAuth(mode){
-  window.open('https://zetsuinfinityauth.netlify.app/ziauth?mode='+mode,'ztab-auth','width=380,height=620,top=100,left=100');
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-function closeAuth(){
-  document.getElementById('ztab-overlay').style.display='none';
+
+function openModal(mode){
+  authMode = mode;
+  document.getElementById('auth-modal').style.display='flex';
+  document.getElementById('modal-mode-label').textContent = mode==='signup' ? 'JOIN NOW' : 'SIGN IN';
+  document.getElementById('auth-confirm-wrap').style.display = mode==='signup' ? 'block' : 'none';
+  document.getElementById('auth-msg').textContent='';
 }
-function setMode(mode){
-  if(mode==='signup'){
-    su.classList.add('active'); li.classList.remove('active');
-    cw.style.display='block'; sb.textContent='Create Account';
-  } else {
-    li.classList.add('active'); su.classList.remove('active');
-    cw.style.display='none'; sb.textContent='Log In';
+
+function closeModal(){
+  document.getElementById('auth-modal').style.display='none';
+}
+
+async function submitAuth(){
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value.trim();
+  const confirm = document.getElementById('auth-confirm')?.value.trim();
+  const msg = document.getElementById('auth-msg');
+  const btn = document.getElementById('auth-submit');
+
+  if(!email || !pass){ msg.textContent='EMAIL AND PASSWORD REQUIRED'; return; }
+  if(authMode==='signup' && pass!==confirm){ msg.textContent="PASSWORDS DON'T MATCH"; return; }
+
+  btn.textContent='...'; btn.disabled=true;
+  const encoded = await sha256(pass);
+
+  try {
+    if(authMode==='signup'){
+      // check if exists
+      const check = await fetch(`${SB_URL}/rest/v1/zetsu_edu?email=eq.${encodeURIComponent(email)}`,{
+        headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
+      });
+      const existing = await check.json();
+      if(existing.length > 0){ msg.textContent='ACCOUNT ALREADY EXISTS'; btn.textContent='SUBMIT'; btn.disabled=false; return; }
+
+      const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu`,{
+        method:'POST',
+        headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
+        body:JSON.stringify([{email,encode:encoded,display_name:email.split('@')[0],created_at:new Date().toISOString()}])
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.message||'Signup failed');
+      sessionStorage.setItem('ztab_user', JSON.stringify(data[0]));
+      closeModal();
+      showAd(data[0]);
+
+    } else {
+      const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?email=eq.${encodeURIComponent(email)}`,{
+        headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
+      });
+      const users = await res.json();
+      if(!users.length){ msg.textContent='USER NOT FOUND'; btn.textContent='SUBMIT'; btn.disabled=false; return; }
+      if(users[0].encode !== encoded){ msg.textContent='INCORRECT PASSWORD'; btn.textContent='SUBMIT'; btn.disabled=false; return; }
+      sessionStorage.setItem('ztab_user', JSON.stringify(users[0]));
+      closeModal();
+      showAd(users[0]);
+    }
+  } catch(err){
+    msg.textContent = err.message.toUpperCase();
+  } finally {
+    btn.textContent='SUBMIT'; btn.disabled=false;
   }
 }
 
-setInterval(()=>{
-  const t=document.getElementById('ztab-time');
-  if(t) t.textContent='[ '+new Date().toISOString()+' ]';
-},1000);
+function showAd(user){
+  sessionStorage.setItem('pending_user', JSON.stringify(user));
+  document.getElementById('ad-overlay').style.display='flex';
+}
 
-document.addEventListener('DOMContentLoaded',()=>{
-  const session = sessionStorage.getItem('ztab_token');
-  const user = sessionStorage.getItem('ztab_user');
-  if(session && user) showLoggedIn(JSON.parse(user));
+function claimPoints(){
+  document.getElementById('ad-overlay').style.display='none';
+  const adHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>ZETSU AD</title><style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:monospace}</style></head><body><script src="https://quge5.com/88/tag.min.js" data-zone="233575" async data-cfasync="false"><\/script></body></html>`;
+  const popup = window.open('','zetsu_ad','width=480,height=320,top=200,left=400');
+  popup.document.write(adHTML);
+  popup.document.close();
+  const user = JSON.parse(sessionStorage.getItem('pending_user'));
+  sessionStorage.removeItem('pending_user');
+  showLoggedIn(user);
+}
 
-  document.getElementById('ztab-form').addEventListener('submit', async e=>{
-    e.preventDefault();
-    const email = document.getElementById('ztab-email').value.trim();
-    const password = document.getElementById('ztab-password').value.trim();
-    const confirm = document.getElementById('ztab-confirm').value.trim();
-    const sb = document.getElementById('ztab-submit');
-    const orig = sb.textContent;
-
-    if(!email){ flash(sb,'Email Required',orig); return; }
-    if(!password){ flash(sb,'Password Required',orig); return; }
-    if(ztabMode==='signup' && password!==confirm){ flash(sb,"Passwords Don't Match",orig); return; }
-
-    sb.disabled=true;
-    sb.textContent='Charging...';
-
-    try{
-      const res = await fetch(ZTAB_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          email, password,
-          display_name: email.split('@')[0],
-          mode: ztabMode,
-          device_id: navigator.userAgent,
-          time: new Date().toISOString()
-        })
-      });
-      const data = await res.json();
-      if(!res.ok){ flash(sb, data.error||'Error',orig); return; }
-
-      if(data.session?.token) sessionStorage.setItem('ztab_token', data.session.token);
-      if(data.user) sessionStorage.setItem('ztab_user', JSON.stringify(data.user));
-
-      sb.textContent = ztabMode==='signup' ? 'Account Created' : 'Access Granted';
-      setTimeout(()=>{
-        closeAuth();
-        showLoggedIn(data.user);
-      },800);
-
-    } catch(err){
-      flash(sb,'Server Error',orig);
-    } finally {
-      setTimeout(()=>{ sb.disabled=false; },2000);
-    }
-  });
-});
-
-function flash(btn,msg,orig){
-  btn.textContent=msg;
-  setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },1800);
+function skipAd(){
+  document.getElementById('ad-overlay').style.display='none';
+  const user = JSON.parse(sessionStorage.getItem('pending_user'));
+  sessionStorage.removeItem('pending_user');
+  showLoggedIn(user);
 }
 
 function showLoggedIn(user){
+  const nc = document.getElementById('nav-cta');
+  if(nc){ nc.textContent=(user?.display_name||user?.email||'USER').toUpperCase(); nc.onclick=function(){return false;} }
   document.getElementById('hero-btns').style.display='none';
   const pts = document.getElementById('hero-points');
   pts.style.display='flex';
@@ -1102,11 +1136,28 @@ function showLoggedIn(user){
 }
 
 function signOut(){
-  sessionStorage.removeItem('ztab_token');
+  const nc = document.getElementById('nav-cta');
+  if(nc){ nc.textContent='Join Now'; nc.onclick=function(){openModal('signup');return false;} }
   sessionStorage.removeItem('ztab_user');
+  sessionStorage.removeItem('pending_user');
+  document.getElementById('ad-overlay').style.display='none';
+  document.getElementById('ad-claim-btn').style.display='none';
   document.getElementById('hero-points').style.display='none';
   document.getElementById('hero-btns').style.display='flex';
 }
+
+function copyRef(){
+  const txt=document.getElementById('ref-link-text').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.querySelector('.ref-copy-btn');
+    btn.textContent='COPIED';
+    setTimeout(()=>{btn.textContent='COPY'},2000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const user = sessionStorage.getItem('ztab_user');
+  if(user) showLoggedIn(JSON.parse(user));
+});
 </script>
 </body>
-</html>
