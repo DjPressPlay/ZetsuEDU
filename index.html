@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZETSU</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --black:#030303;
+  --off-black:#0d0d0d;
+  --panel:#111111;
+  --border:#1e1e1e;
+  --border-hot:#2e2e2e;
+  --white:#f2f0eb;
+  --muted:#666;
+  --accent:#c8ff00;
+  --accent-dim:#8fba00;
+  --red:#ff3232;
+  --mono:'Space Mono',monospace;
+  --display:'Bebas Neue',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--mono);
+  font-size:14px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  height:56px;
+  border-bottom:1px solid var(--border);
+  background:rgba(3,3,3,0.92);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{
+  font-family:var(--display);
+  font-size:28px;
+  letter-spacing:4px;
+  color:var(--white);
+  text-decoration:none;
+}
+.nav-links{
+  display:flex;
+  gap:32px;
+  list-style:none;
+}
+.nav-links a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{
+  background:var(--accent);
+  color:#000;
+  border:none;
+  padding:8px 20px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:none;
+  transition:opacity .15s;
+}
+.nav-cta:hover{opacity:.85}
+
+/* ─── HERO ─── */
+#hero{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+  padding:80px 40px 60px;
+  text-align:center;
+}
+.hero-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;
+  opacity:0.5;
+  pointer-events:none;
+}
+.hero-grid::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 70% 70% at 50% 60%, transparent 30%, var(--black) 100%);
+}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{
+  font-size:11px;
+  letter-spacing:5px;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+.hero-title{
+  font-family:var(--display);
+  font-size:clamp(80px,16vw,200px);
+  line-height:0.88;
+  letter-spacing:-2px;
+  color:var(--white);
+  margin-bottom:32px;
+}
+.hero-title span{color:var(--accent)}
+.hero-sub{
+  max-width:500px;
+  margin:0 auto 48px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  background:var(--accent);
+  color:#000;
+  border:none;
+  padding:14px 36px;
+  font-family:var(--mono);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  display:inline-block;
+  transition:opacity .15s,transform .15s;
+}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px)}
+.btn-ghost{
+  background:transparent;
+  color:var(--white);
+  border:1px solid var(--border-hot);
+  padding:14px 36px;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  display:inline-block;
+  transition:border-color .15s,color .15s;
+}
+.btn-ghost:hover{border-color:var(--white);color:var(--white)}
+
+/* ─── SECTIONS ─── */
+section{
+  padding:100px 40px;
+  border-top:1px solid var(--border);
+}
+.section-label{
+  font-size:10px;
+  letter-spacing:5px;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+.section-title{
+  font-family:var(--display);
+  font-size:clamp(42px,6vw,80px);
+  line-height:0.95;
+  letter-spacing:1px;
+  margin-bottom:40px;
+}
+.section-title em{
+  font-style:normal;
+  color:var(--accent);
+}
+.container{max-width:1100px;margin:0 auto}
+
+/* ─── USER FLOW ─── */
+#flow{background:var(--off-black)}
+.flow-track{
+  display:flex;
+  align-items:center;
+  gap:0;
+  overflow-x:auto;
+  padding-bottom:8px;
+}
+.flow-step{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:20px 28px;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  white-space:nowrap;
+  position:relative;
+  flex-shrink:0;
+}
+.flow-step.active{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+.flow-arrow{
+  color:var(--muted);
+  font-size:18px;
+  padding:0 8px;
+  flex-shrink:0;
+}
+
+/* ─── SHOP ─── */
+#shop .shop-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+.shop-item{
+  background:var(--panel);
+  padding:40px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  cursor:pointer;
+  transition:background .2s;
+  min-height:220px;
+  text-align:center;
+}
+.shop-item:hover{background:var(--off-black)}
+.shop-item-icon{
+  width:64px;height:64px;
+  border:1px solid var(--border-hot);
+  display:grid;place-items:center;
+  font-size:22px;
+  color:var(--accent);
+}
+.shop-item-name{
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.shop-item-tag{
+  font-family:var(--display);
+  font-size:22px;
+  letter-spacing:2px;
+}
+
+/* ─── WHAT IS ─── */
+#what{background:var(--off-black)}
+.what-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+.what-text p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:2;
+  margin-bottom:20px;
+}
+.what-stat-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+.what-stat{
+  background:var(--panel);
+  padding:32px 24px;
+}
+.what-stat-num{
+  font-family:var(--display);
+  font-size:52px;
+  color:var(--accent);
+  line-height:1;
+  margin-bottom:8px;
+}
+.what-stat-label{
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ─── WHAT WE DO ─── */
+.do-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.do-card{
+  background:var(--panel);
+  padding:40px 32px;
+  position:relative;
+  overflow:hidden;
+  transition:background .2s;
+}
+.do-card:hover{background:var(--off-black)}
+.do-card-num{
+  font-family:var(--display);
+  font-size:80px;
+  color:var(--border-hot);
+  line-height:1;
+  position:absolute;
+  top:16px;right:24px;
+}
+.do-card-tag{
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:16px;
+}
+.do-card-title{
+  font-family:var(--display);
+  font-size:28px;
+  margin-bottom:12px;
+  position:relative;z-index:1;
+}
+.do-card-body{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.9;
+  position:relative;z-index:1;
+}
+.do-card-link{
+  display:inline-block;
+  margin-top:24px;
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--white);
+  text-decoration:none;
+  border-bottom:1px solid var(--border-hot);
+  padding-bottom:4px;
+  transition:border-color .15s,color .15s;
+}
+.do-card-link:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ─── EMAIL ─── */
+#email{
+  background:var(--accent);
+  color:#000;
+  text-align:center;
+  padding:100px 40px;
+  border-top:none;
+}
+#email .section-label{color:rgba(0,0,0,0.5)}
+#email .section-title{color:#000}
+.email-form{
+  display:flex;
+  gap:0;
+  max-width:520px;
+  margin:0 auto;
+}
+.email-input{
+  flex:1;
+  background:#000;
+  border:none;
+  padding:16px 20px;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--accent);
+  outline:none;
+}
+.email-input::placeholder{color:#333}
+.email-submit{
+  background:var(--white);
+  color:#000;
+  border:none;
+  padding:16px 28px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.email-submit:hover{opacity:.85}
+
+/* ─── NEWSLETTER ─── */
+#news{background:var(--off-black)}
+.news-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.news-card{
+  background:var(--panel);
+  padding:28px 24px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.news-card:hover{background:var(--off-black)}
+.news-card-tag{
+  font-size:9px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:12px;
+}
+.news-card-title{
+  font-family:var(--display);
+  font-size:22px;
+  line-height:1.1;
+  margin-bottom:12px;
+}
+.news-card-date{
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:2px;
+}
+
+/* ─── REFERRAL ─── */
+#ref{
+  background:var(--panel);
+  border-top:1px solid var(--border);
+}
+.ref-box{
+  border:1px solid var(--border-hot);
+  padding:48px;
+  max-width:720px;
+  margin:0 auto;
+  text-align:center;
+}
+.ref-box p{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:32px;
+  line-height:1.9;
+}
+.ref-link-display{
+  background:var(--black);
+  border:1px solid var(--border);
+  padding:16px 24px;
+  font-size:13px;
+  color:var(--accent);
+  letter-spacing:1px;
+  margin-bottom:24px;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.ref-copy-btn{
+  background:transparent;
+  border:1px solid var(--border-hot);
+  color:var(--muted);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:8px 16px;
+  cursor:pointer;
+  transition:border-color .15s,color .15s;
+  white-space:nowrap;
+}
+.ref-copy-btn:hover{border-color:var(--white);color:var(--white)}
+
+/* ─── ADS ─── */
+#ads{background:var(--off-black)}
+.ad-split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+.ad-display{
+  border:1px dashed var(--border-hot);
+  aspect-ratio:16/9;
+  display:grid;
+  place-items:center;
+  font-size:10px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--muted);
+  position:relative;
+  overflow:hidden;
+}
+.ad-display::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255,255,255,0.02) 10px,
+    rgba(255,255,255,0.02) 11px
+  );
+}
+.ad-text p{color:var(--muted);font-size:13px;line-height:2;margin-bottom:24px}
+
+/* ─── FINAL CTA ─── */
+#cta{
+  background:var(--black);
+  text-align:center;
+  padding:140px 40px;
+}
+#cta .section-title{font-size:clamp(52px,8vw,110px);margin-bottom:24px}
+#cta p{color:var(--muted);font-size:13px;margin-bottom:48px}
+
+/* ─── FOOTER ─── */
+footer{
+  border-top:1px solid var(--border);
+  padding:48px 40px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:40px;
+  align-items:center;
+}
+.footer-logo{
+  font-family:var(--display);
+  font-size:32px;
+  letter-spacing:4px;
+  color:var(--white);
+}
+.footer-links{
+  display:flex;
+  gap:32px;
+  list-style:none;
+}
+.footer-links a{
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-decoration:none;
+  transition:color .15s;
+}
+.footer-links a:hover{color:var(--white)}
+.footer-copy{
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:2px;
+  grid-column:1/-1;
+  border-top:1px solid var(--border);
+  padding-top:24px;
+  margin-top:0;
+}
+
+/* ─── TICKER ─── */
+.ticker-wrap{
+  background:var(--accent);
+  overflow:hidden;
+  padding:10px 0;
+  white-space:nowrap;
+}
+.ticker-inner{
+  display:inline-block;
+  animation:ticker 20s linear infinite;
+}
+.ticker-inner span{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:#000;
+  margin:0 40px;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  section{padding:72px 20px}
+  .what-grid,.ad-split{grid-template-columns:1fr}
+  .do-grid{grid-template-columns:1fr}
+  .flow-track{flex-direction:column;align-items:flex-start;gap:8px}
+  .flow-arrow{display:none}
+  footer{grid-template-columns:1fr}
+  .email-form{flex-direction:column}
+  .ref-link-display{flex-direction:column;align-items:flex-start}
+}
+
+/* ─── ZTAB AUTH ─── */
+.frameType{
+  border:10px solid #000;
+  border-radius:14px;
+  overflow:hidden;
+  width:clamp(280px,92vw,340px);
+  box-shadow:0 0 40px rgba(0,0,0,0.8);
+  position:relative;
+  font-family:'Orbitron',sans-serif;
+}
+.frameType-inner{
+  border:5px solid transparent;
+  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
+  border-radius:10px;
+  background:radial-gradient(120% 100% at 50% 0%,#1e1e1e 0%,#0e0e0e 70%,#111 100%);
+  padding:14px;
+  position:relative;
+  overflow:hidden;
+}
+.card-header{
+  text-align:center;
+  background:#000;
+  border-bottom:2px solid #4cc9f0;
+  font-size:0.8rem;
+  font-weight:800;
+  text-transform:uppercase;
+  padding:5px;
+  margin-bottom:10px;
+  position:relative;
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+}
+.type-banner{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  border:1.5px solid #4cc9f0;
+  background:#000;
+  border-radius:6px;
+  padding:5px 8px;
+  margin-bottom:12px;
+  position:relative;
+}
+.type-banner button{
+  font-size:0.72rem;
+  font-weight:700;
+  padding:5px 10px;
+  border-radius:5px;
+  border:none;
+  cursor:pointer;
+  background:#1a1a1a;
+  color:#aaa;
+  transition:0.2s;
+  font-family:'Orbitron',sans-serif;
+}
+.type-banner button.active{background:#4cc9f0;color:#000}
+.form-group{margin-bottom:8px}
+.form-group label{font-size:0.65rem;text-align:left;display:block;width:90%;margin:0 auto 3px;color:#bbb;font-family:'Orbitron',sans-serif}
+.form-group input{
+  width:90%;padding:6px;border-radius:5px;
+  border:1px solid #333;background:#0d0d0f;
+  color:#fff;font-size:0.72rem;
+  transition:border-color 0.2s,box-shadow 0.3s;
+  font-family:'Orbitron',sans-serif;
+}
+.form-group input:focus{border-color:#4cc9f0;box-shadow:0 0 6px #4cc9f0;outline:none}
+.submit-btn{
+  width:90%;padding:8px;
+  background:#4cc9f0;color:#000;
+  border:none;border-radius:6px;
+  font-weight:700;font-size:0.8rem;
+  cursor:pointer;margin-top:8px;
+  transition:background 0.2s,box-shadow 0.3s;
+  font-family:'Orbitron',sans-serif;
+}
+.submit-btn:hover{background:#6ef0ff;box-shadow:0 0 10px #4cc9f0cc}
+.meta-block{
+  border-top:2px solid transparent;
+  border-bottom:2px solid transparent;
+  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
+  background:#000;
+  padding:8px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:0.7rem;
+  margin-top:14px;
+}
+.meta-line{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:0.65rem}
+.meta-label{font-weight:800;text-transform:uppercase;color:#eee;font-family:'Orbitron',sans-serif}
+.meta-value{font-size:0.45rem;font-family:'Orbitron',sans-serif;color:#aaa}
+.meta-bottom{
+  border-top:2px solid transparent;
+  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
+  background:#111;
+  padding:8px 12px 32px;
+  text-align:center;
+  color:#ccc;
+  font-size:0.5rem;
+  margin-top:10px;
+  position:relative;
+  font-family:'Orbitron',sans-serif;
+}
+.meta-timestamp{font-size:0.65rem;color:#aefcff;margin-top:4px;letter-spacing:0.03em;padding:2px 14px;font-weight:600;text-shadow:0 0 4px #4cc9f0cc}
+.rarity.ZEOE{
+  position:absolute;right:10px;bottom:6px;
+  font-weight:800;letter-spacing:.02em;
+  border:1px solid rgba(255,255,255,.3);
+  padding:2px 6px;border-radius:4px;
+  font-size:0.65rem;
+  background:conic-gradient(from 0deg,#ff0040,#ffd200,#00ffcc,#00a2ff,#ff4dff,#ff0040);
+  background-size:200% 200%;
+  animation:holoShift 6s linear infinite;
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+}
+@keyframes holoShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">ZETSU</a>
+  <ul class="nav-links">
+    <li><a href="#flow">System</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#news">Feed</a></li>
+    <li><a href="#ref">Refer</a></li>
+  </ul>
+  <a class="nav-cta" href="#email">Join Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">The Zetsumetsu Corporation &nbsp;/&nbsp; Est. Detroit</p>
+    <h1 class="hero-title">ZET<span>SU</span></h1>
+    <p class="hero-sub">Sign in. Earn points. Watch ads. Spend. Refer. The loop that rewards every action you take inside the reality.</p>
+    <div class="hero-btns" id="hero-btns">
+      <button class="btn-primary" onclick="openAuth('login')">Sign In</button>
+      <button class="btn-ghost" onclick="openAuth('signup')">Join Now</button>
+    </div>
+    <div id="hero-points" style="display:none;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center">
+      <div style="border:1px solid var(--border-hot);padding:14px 32px;text-align:center">
+        <div style="font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Points</div>
+        <div id="hero-points-val" style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--accent);line-height:1">0</div>
+      </div>
+      <div style="border:1px solid var(--border-hot);padding:14px 32px;text-align:center">
+        <div style="font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">User</div>
+        <div id="hero-user-val" style="font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1">—</div>
+      </div>
+      <button class="btn-ghost" onclick="signOut()" style="font-size:11px;padding:10px 24px">Sign Out</button>
+    </div>
+  </div>
+</section>
+
+<!-- ZTAB AUTH MODAL -->
+<div id="ztab-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.88);align-items:center;justify-content:center">
+  <div style="position:relative">
+    <button onclick="closeAuth()" style="position:absolute;top:-36px;right:0;background:none;border:none;color:#666;font-size:18px;cursor:pointer;font-family:monospace;color:#fff">X</button>
+    <iframe src="https://zetsutab.netlify.app/account" style="width:360px;height:620px;border:none;border-radius:14px;display:block"></iframe>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
+    <span>EARN</span><span>SPEND</span><span>REFER</span><span>SIGZ</span><span>ZETSU</span><span>CLICK TO EARN</span><span>DETROIT</span><span>ZETSUMETSU</span>
+  </div>
+</div>
+
+<!-- USER FLOW -->
+<section id="flow">
+  <div class="container">
+    <p class="section-label">System Loop</p>
+    <h2 class="section-title">How It <em>Works</em></h2>
+    <div class="flow-track">
+      <div class="flow-step active">01&nbsp; Sign In</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">02&nbsp; Interact</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">03&nbsp; Earn Points</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">04&nbsp; Watch Ads</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">05&nbsp; Spend</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step active">06&nbsp; Refer</div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section id="shop">
+  <div class="container">
+    <p class="section-label">Store</p>
+    <h2 class="section-title">Shop <em>Preview</em></h2>
+    <div class="shop-grid">
+      <div class="shop-item">
+        <div class="shop-item-icon">Z</div>
+        <div class="shop-item-name">Drop 001</div>
+        <div class="shop-item-tag">ZETSU ITEM</div>
+      </div>
+      <div class="shop-item">
+        <div class="shop-item-icon">Z</div>
+        <div class="shop-item-name">Drop 002</div>
+        <div class="shop-item-tag">ZETSU ITEM</div>
+      </div>
+      <div class="shop-item">
+        <div class="shop-item-icon">Z</div>
+        <div class="shop-item-name">Drop 003</div>
+        <div class="shop-item-tag">ZETSU ITEM</div>
+      </div>
+      <div class="shop-item">
+        <div class="shop-item-icon">Z</div>
+        <div class="shop-item-name">Drop 004</div>
+        <div class="shop-item-tag">COMING SOON</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS ZETSU -->
+<section id="what">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-text">
+        <p class="section-label">Origin</p>
+        <h2 class="section-title">What Is <em>Zetsu</em></h2>
+        <p>Zetsu is the economic layer of The Zetsumetsu Corporation — a self-sustaining loop built on attention, action, and reward. Every click inside the reality generates value. Every referral compounds it.</p>
+        <p>This is not a platform. It is a system. You sign in, you move through the loop, you accumulate. The structure does the rest.</p>
+        <a class="btn-ghost" href="#" style="margin-top:8px">Learn More</a>
+      </div>
+      <div class="what-stat-grid">
+        <div class="what-stat">
+          <div class="what-stat-num">$AWT</div>
+          <div class="what-stat-label">Token Ecosystem</div>
+        </div>
+        <div class="what-stat">
+          <div class="what-stat-num">∞</div>
+          <div class="what-stat-label">Referral Loop</div>
+        </div>
+        <div class="what-stat">
+          <div class="what-stat-num">01</div>
+          <div class="what-stat-label">Reality</div>
+        </div>
+        <div class="what-stat">
+          <div class="what-stat-num">SIGZ</div>
+          <div class="what-stat-label">Social Layer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DO -->
+<section id="do">
+  <div class="container">
+    <p class="section-label">Products</p>
+    <h2 class="section-title">What We <em>Do</em></h2>
+    <div class="do-grid">
+      <div class="do-card">
+        <div class="do-card-num">01</div>
+        <div class="do-card-tag">Earn</div>
+        <div class="do-card-title">Click to Earn</div>
+        <p class="do-card-body">Every interaction inside Zetsu generates points. Ads, posts, referrals — all of it feeds the loop. Your attention has a value here.</p>
+        <a class="do-card-link" href="#">Explore →</a>
+      </div>
+      <div class="do-card">
+        <div class="do-card-num">02</div>
+        <div class="do-card-tag">Social</div>
+        <div class="do-card-title">Visit SIGZ</div>
+        <p class="do-card-body">SignalZ is the social feed powering The Zetsumetsu Corporation. TCG-style posts, community drops, and live signal tracking.</p>
+        <a class="do-card-link" href="https://sigz.netlify.app" target="_blank">Open SIGZ →</a>
+      </div>
+      <div class="do-card">
+        <div class="do-card-num">03</div>
+        <div class="do-card-tag">Expand</div>
+        <div class="do-card-title">Refer & Grow</div>
+        <p class="do-card-body">Your referral link compounds every time someone enters the loop through you. The system builds the network — you collect the rewards.</p>
+        <a class="do-card-link" href="#ref">Get Link →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL SIGNUP -->
+<section id="email" style="padding:0">
+  <div style="background:var(--accent);padding:100px 40px;text-align:center;border-top:1px solid var(--border)">
+    <p class="section-label" style="color:rgba(0,0,0,0.5)">Access</p>
+    <h2 class="section-title" style="color:#000">Join <em style="color:#000;text-decoration:underline;text-underline-offset:8px">Zetsu</em></h2>
+    <p style="color:rgba(0,0,0,0.6);font-size:13px;margin-bottom:40px;max-width:400px;margin-left:auto;margin-right:auto">Early access, drops, and system updates direct to your inbox. No noise.</p>
+    <div class="email-form">
+      <input class="email-input" type="email" placeholder="your@email.com">
+      <button class="email-submit">JOIN NOW</button>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="news">
+  <div class="container">
+    <p class="section-label">Content Hub</p>
+    <h2 class="section-title">Latest <em>Posts</em></h2>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-card-tag">System</div>
+        <div class="news-card-title">HOW THE LOOP WORKS</div>
+        <div class="news-card-date">APR 2025</div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-tag">Token</div>
+        <div class="news-card-title">$AWT TOKEN DROP</div>
+        <div class="news-card-date">MAR 2025</div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-tag">SIGZ</div>
+        <div class="news-card-title">SIGZ V2 IS LIVE</div>
+        <div class="news-card-date">FEB 2025</div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-tag">Detroit</div>
+        <div class="news-card-title">ZETSU CORP ORIGINS</div>
+        <div class="news-card-date">JAN 2025</div>
+      </div>
+      <div class="news-card">
+        <div class="news-card-tag">Drop</div>
+        <div class="news-card-title">FIRST STORE DROP</div>
+        <div class="news-card-date">DEC 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERRAL -->
+<section id="ref">
+  <div class="container">
+    <p class="section-label">Network</p>
+    <h2 class="section-title" style="text-align:center">Referral <em>System</em></h2>
+    <div class="ref-box">
+      <p>Every person you bring into the loop adds to your stack. Your link is permanent. Your network compounds automatically. No cap.</p>
+      <div class="ref-link-display">
+        <span id="ref-link-text">zetsu.io/ref/XXXXXX</span>
+        <button class="ref-copy-btn" onclick="copyRef()">COPY</button>
+      </div>
+      <a class="btn-primary" href="#">GET YOUR LINK</a>
+    </div>
+  </div>
+</section>
+
+<!-- ADS -->
+<section id="ads">
+  <div class="container">
+    <div class="ad-split">
+      <div>
+        <p class="section-label">Monetization</p>
+        <h2 class="section-title">Watch &amp; <em>Earn</em></h2>
+        <div class="ad-text">
+          <p>Ads inside Zetsu are not interruptions. They are the engine. Every watch generates points. Points become purchasing power. The system rewards your time directly.</p>
+        </div>
+        <a class="btn-primary" href="#">WATCH ZETSU</a>
+      </div>
+      <div class="ad-display">
+        <span>ZETSU AD SPACE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta">
+  <div class="container">
+    <p class="section-label">Begin</p>
+    <h2 class="section-title">Start <em>Now</em></h2>
+    <p>The loop does not wait. Get in or get left out.</p>
+    <a class="btn-primary" style="font-size:14px;padding:18px 52px;letter-spacing:4px" href="#email">ENTER ZETSU</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ZETSU</div>
+  <ul class="footer-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="https://sigz.netlify.app" target="_blank">SIGZ</a></li>
+    <li><a href="#">Refer</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 The Zetsumetsu Corporation &nbsp;•&nbsp; Detroit, MI &nbsp;•&nbsp; All rights reserved.</p>
+</footer>
+
+<script>
+function copyRef(){
+  const txt=document.getElementById('ref-link-text').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.querySelector('.ref-copy-btn');
+    btn.textContent='COPIED';
+    setTimeout(()=>{btn.textContent='COPY'},2000);
+  });
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<script>
+const ZTAB_URL = 'https://zetsu-infinity-auth.netlify.app/.netlify/functions/encode';
+let ztabMode = 'signup';
+
+function openAuth(mode){
+  window.open('https://zetsuinfinityauth.netlify.app/ziauth?mode='+mode,'ztab-auth','width=380,height=620,top=100,left=100');
+}
+function closeAuth(){
+  document.getElementById('ztab-overlay').style.display='none';
+}
+function setMode(mode){
+  if(mode==='signup'){
+    su.classList.add('active'); li.classList.remove('active');
+    cw.style.display='block'; sb.textContent='Create Account';
+  } else {
+    li.classList.add('active'); su.classList.remove('active');
+    cw.style.display='none'; sb.textContent='Log In';
+  }
+}
+
+setInterval(()=>{
+  const t=document.getElementById('ztab-time');
+  if(t) t.textContent='[ '+new Date().toISOString()+' ]';
+},1000);
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const session = sessionStorage.getItem('ztab_token');
+  const user = sessionStorage.getItem('ztab_user');
+  if(session && user) showLoggedIn(JSON.parse(user));
+
+  document.getElementById('ztab-form').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const email = document.getElementById('ztab-email').value.trim();
+    const password = document.getElementById('ztab-password').value.trim();
+    const confirm = document.getElementById('ztab-confirm').value.trim();
+    const sb = document.getElementById('ztab-submit');
+    const orig = sb.textContent;
+
+    if(!email){ flash(sb,'Email Required',orig); return; }
+    if(!password){ flash(sb,'Password Required',orig); return; }
+    if(ztabMode==='signup' && password!==confirm){ flash(sb,"Passwords Don't Match",orig); return; }
+
+    sb.disabled=true;
+    sb.textContent='Charging...';
+
+    try{
+      const res = await fetch(ZTAB_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          email, password,
+          display_name: email.split('@')[0],
+          mode: ztabMode,
+          device_id: navigator.userAgent,
+          time: new Date().toISOString()
+        })
+      });
+      const data = await res.json();
+      if(!res.ok){ flash(sb, data.error||'Error',orig); return; }
+
+      if(data.session?.token) sessionStorage.setItem('ztab_token', data.session.token);
+      if(data.user) sessionStorage.setItem('ztab_user', JSON.stringify(data.user));
+
+      sb.textContent = ztabMode==='signup' ? 'Account Created' : 'Access Granted';
+      setTimeout(()=>{
+        closeAuth();
+        showLoggedIn(data.user);
+      },800);
+
+    } catch(err){
+      flash(sb,'Server Error',orig);
+    } finally {
+      setTimeout(()=>{ sb.disabled=false; },2000);
+    }
+  });
+});
+
+function flash(btn,msg,orig){
+  btn.textContent=msg;
+  setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },1800);
+}
+
+function showLoggedIn(user){
+  document.getElementById('hero-btns').style.display='none';
+  const pts = document.getElementById('hero-points');
+  pts.style.display='flex';
+  document.getElementById('hero-user-val').textContent=(user?.display_name||user?.email||'USER').toUpperCase();
+  document.getElementById('hero-points-val').textContent='0';
+}
+
+function signOut(){
+  sessionStorage.removeItem('ztab_token');
+  sessionStorage.removeItem('ztab_user');
+  document.getElementById('hero-points').style.display='none';
+  document.getElementById('hero-btns').style.display='flex';
+}
+</script>
+</body>
+</html>
