@@ -768,8 +768,28 @@ footer{
   <p style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#f2f0eb">EARN POINTS</p>
   <p style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:#666;text-transform:uppercase">Watch an ad to earn points or skip to continue</p>
   <div style="display:flex;gap:16px">
-    <button onclick="claimPoints()" style="background:#c8ff00;color:#000;border:none;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">CLAIM POINTS</button>
+    <a id="claim-link" href="https://omg10.com/4/10926118" target="_blank" onclick="claimPoints()" style="background:#c8ff00;color:#000;border:none;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block">CLAIM POINTS</a>
     <button onclick="skipAd()" style="background:transparent;color:#f2f0eb;border:1px solid #2e2e2e;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">SKIP</button>
+  </div>
+</div>
+
+<!-- POINTS BANK OVERLAY -->
+<div id="points-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:32px">
+  <button onclick="closePointsBank()" style="position:absolute;top:32px;right:40px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;color:#fff;font-family:monospace">&#x2715;</button>
+  <p style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#f2f0eb">POINTS BANK</p>
+  <div style="display:flex;gap:1px;background:#1e1e1e">
+    <div style="background:#111;padding:32px 48px;text-align:center">
+      <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:8px">Total Points</div>
+      <div id="bank-total" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#c8ff00;line-height:1">0</div>
+    </div>
+    <div style="background:#111;padding:32px 48px;text-align:center">
+      <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:8px">Last Earned</div>
+      <div id="bank-last" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#f2f0eb;line-height:1">—</div>
+    </div>
+  </div>
+  <div style="width:560px;max-width:90vw">
+    <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:16px">Earnings Log</div>
+    <div id="bank-log" style="background:#111;border:1px solid #1e1e1e;max-height:200px;overflow-y:auto"></div>
   </div>
 </div>
 
@@ -1109,13 +1129,12 @@ function showAd(user){
 
 function claimPoints(){
   document.getElementById('ad-overlay').style.display='none';
-  const adHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>ZETSU AD</title><style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:monospace}</style></head><body><script src="https://quge5.com/88/tag.min.js" data-zone="233575" async data-cfasync="false"><\/script></body></html>`;
-  const popup = window.open('','zetsu_ad','width=480,height=320,top=200,left=400');
-  popup.document.write(adHTML);
-  popup.document.close();
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
+  const pts = 10;
+  addPointsLog(user, pts);
   showLoggedIn(user);
+  openPointsBank(pts);
 }
 
 function skipAd(){
@@ -1125,14 +1144,37 @@ function skipAd(){
   showLoggedIn(user);
 }
 
+function addPointsLog(user, pts){
+  const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
+  log.unshift({pts, time: new Date().toLocaleTimeString(), action:'Ad Watch'});
+  sessionStorage.setItem('points_log', JSON.stringify(log));
+  const total = (parseInt(sessionStorage.getItem('total_points')||'0')) + pts;
+  sessionStorage.setItem('total_points', total);
+}
+
+function openPointsBank(lastEarned){
+  const total = sessionStorage.getItem('total_points')||'0';
+  const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
+  document.getElementById('bank-total').textContent = total;
+  document.getElementById('bank-last').textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
+  const logEl = document.getElementById('bank-log');
+  logEl.innerHTML = log.map(e=>`<div style="display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #1e1e1e;font-size:11px;letter-spacing:1px"><span style="color:#666">${e.time}</span><span>${e.action}</span><span style="color:#c8ff00">+${e.pts} PTS</span></div>`).join('');
+  document.getElementById('points-overlay').style.display='flex';
+}
+
+function closePointsBank(){
+  document.getElementById('points-overlay').style.display='none';
+}
+
 function showLoggedIn(user){
+  const currentTotal = parseInt(sessionStorage.getItem('total_points')||'0');
   const nc = document.getElementById('nav-cta');
   if(nc){ nc.textContent=(user?.display_name||user?.email||'USER').toUpperCase(); nc.onclick=function(){return false;} }
   document.getElementById('hero-btns').style.display='none';
-  const pts = document.getElementById('hero-points');
-  pts.style.display='flex';
+  const ptsPanel = document.getElementById('hero-points');
+  ptsPanel.style.display='flex';
   document.getElementById('hero-user-val').textContent=(user?.display_name||user?.email||'USER').toUpperCase();
-  document.getElementById('hero-points-val').textContent='0';
+  document.getElementById('hero-points-val').textContent=currentTotal;
 }
 
 function signOut(){
