@@ -796,33 +796,7 @@ footer{
   </div>
 </div>
 
-<!-- POINTS BANK WIDGET -->
-<div id="points-bank-widget">
-  <div class="bank-card">
-    <div class="bank-balance">
-      <div class="bank-balance-label">Available Balance</div>
-      <div class="bank-balance-amount" id="widget-bank-total">0</div>
-      <div class="bank-pts-label">SIGZ POINTS</div>
-      <div class="bank-last-badge">
-        <div class="bank-last-label">Last Earned</div>
-        <div class="bank-last-val" id="widget-bank-last">—</div>
-      </div>
-    </div>
-    <div class="bank-log-header">
-      <span class="bank-log-title">Transaction Log</span>
-      <span class="bank-log-count" id="widget-bank-log-count">0 entries</span>
-    </div>
-    <div class="bank-log-inner" id="widget-bank-log"></div>
-    <div class="bank-empty" id="widget-bank-empty">No transactions yet</div>
-    <div class="bank-footer">
-      <div class="bank-sync">
-        <div class="bank-sync-dot" id="widget-sync-dot"></div>
-        <span class="bank-sync-txt" id="widget-sync-txt">NOT SYNCED</span>
-      </div>
-      <div style="font-size:7px;letter-spacing:3px;color:#1e1e1e;text-transform:uppercase;">ZETSU BANK</div>
-    </div>
-  </div>
-</div>
+
 
 <!-- AUTH MODAL -->
 <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
@@ -841,31 +815,69 @@ footer{
   </div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-inner">
-    <span>01 &nbsp; SIGN IN</span><span>→</span><span>02 &nbsp; INTERACT</span><span>→</span><span>03 &nbsp; EARN POINTS</span><span>→</span><span>04 &nbsp; WATCH ADS</span><span>→</span><span>05 &nbsp; SPEND</span><span>→</span><span>06 &nbsp; REFER</span><span>→</span>
-    <span>01 &nbsp; SIGN IN</span><span>→</span><span>02 &nbsp; INTERACT</span><span>→</span><span>03 &nbsp; EARN POINTS</span><span>→</span><span>04 &nbsp; WATCH ADS</span><span>→</span><span>05 &nbsp; SPEND</span><span>→</span><span>06 &nbsp; REFER</span><span>→</span>
-  </div>
-</div>
-
-<!-- USER FLOW -->
+<!-- HOW IT WORKS -->
 <section id="flow">
   <div class="container">
     <p class="section-label">System Loop</p>
     <h2 class="section-title">How It <em>Works</em></h2>
-    <div class="flow-track">
-      <div class="flow-step active">01&nbsp; Sign In</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">02&nbsp; Interact</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">03&nbsp; Earn Points</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">04&nbsp; Watch Ads</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">05&nbsp; Spend</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step active">06&nbsp; Refer</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:48px">
+
+      <!-- Container 1 -->
+      <div style="background:var(--panel);padding:48px 40px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">01</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Entry</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Sign In</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Create your account and enter the loop. Your identity is your key to everything inside the reality.</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">02</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Action</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Interact</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Move through the system. Every click, post, and engagement generates signal. The loop tracks it all.</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">03</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Reward</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Earn Points</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Your actions convert directly into SIGZ points. Stored on your account, visible in real time, ready to spend.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container 2 -->
+      <div style="background:var(--off-black);padding:48px 40px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">04</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Engine</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Watch Ads</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Ads are not interruptions here. They are the engine. Watch and earn. Your time has direct purchasing power.</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">05</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Exchange</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Spend</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Use your points inside the Zetsu store. Drops, access, items. The stack you build becomes real value.</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:24px">
+          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">06</div>
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Network</div>
+            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Refer</div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.8">Your referral link compounds automatically. Every person you bring in adds to your stack permanently. No cap.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1114,7 +1126,6 @@ async function claimPoints(){
   sessionStorage.setItem('total_points', total);
 
   showLoggedIn(user);
-  document.getElementById('points-bank-widget').style.display='block';
   renderBankWidget(total, log, pts);
 
   await syncPointsToSupabase(user, total, log);
@@ -1125,7 +1136,6 @@ function skipAd(){
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
   showLoggedIn(user);
-  document.getElementById('points-bank-widget').style.display='block';
   const total = parseInt(sessionStorage.getItem('total_points')||'0');
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
   renderBankWidget(total, log, undefined);
@@ -1165,25 +1175,21 @@ async function loadPointsFromSupabase(user){
 }
 
 function setSyncStatus(state){
-  const ids = [['bank-sync-dot','bank-sync-txt'],['widget-sync-dot','widget-sync-txt']];
-  ids.forEach(([dotId, txtId])=>{
-    const dot = document.getElementById(dotId);
-    const txt = document.getElementById(txtId);
-    if(!dot||!txt) return;
-    if(state==='synced'){ dot.style.background='#c8ff00'; dot.style.boxShadow='0 0 4px #c8ff00'; txt.style.color='#555'; txt.textContent='SYNCED'; }
-    else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
-    else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
-  });
+  const dot = document.getElementById('bank-sync-dot');
+  const txt = document.getElementById('bank-sync-txt');
+  if(!dot||!txt) return;
+  if(state==='synced'){ dot.style.background='#c8ff00'; dot.style.boxShadow='0 0 4px #c8ff00'; txt.style.color='#555'; txt.textContent='SYNCED'; }
+  else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
+  else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
 }
 
 function animateBalance(newVal){
-  ['bank-total','widget-bank-total'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
+  const el = document.getElementById('bank-total');
+  if(el){
     el.classList.add('flash');
     el.textContent = newVal;
     setTimeout(()=>el.classList.remove('flash'), 400);
-  });
+  }
   const navPts = document.getElementById('nav-bank-pts');
   if(navPts) navPts.textContent = newVal;
 }
@@ -1191,36 +1197,30 @@ function animateBalance(newVal){
 function renderBankWidget(total, log, lastEarned){
   animateBalance(total);
 
-  ['bank-last','widget-bank-last'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
-  });
+  const lastEl = document.getElementById('bank-last');
+  if(lastEl) lastEl.textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
 
   document.getElementById('hero-points-val').textContent = total;
 
-  const renderLog = (logElId, emptyElId, countElId) => {
-    const logEl = document.getElementById(logElId);
-    const emptyEl = document.getElementById(emptyElId);
-    const countEl = document.getElementById(countElId);
-    if(!logEl||!emptyEl||!countEl) return;
-    if(!log || log.length===0){
-      logEl.innerHTML='';
-      emptyEl.style.display='block';
-      countEl.textContent='0 entries';
-    } else {
-      emptyEl.style.display='none';
-      countEl.textContent = log.length + (log.length===1?' entry':' entries');
-      logEl.innerHTML = log.map((e,i)=>`
-        <div class="bank-log-row${i===0?' new-entry':''}">
-          <span class="bank-log-time">${e.time}</span>
-          <span class="bank-log-action">${e.action}</span>
-          <span class="bank-log-pts">+${e.pts}</span>
-        </div>`).join('');
-    }
-  };
+  const logEl = document.getElementById('bank-log');
+  const emptyEl = document.getElementById('bank-empty');
+  const countEl = document.getElementById('bank-log-count');
+  if(!logEl||!emptyEl||!countEl) return;
 
-  renderLog('bank-log','bank-empty','bank-log-count');
-  renderLog('widget-bank-log','widget-bank-empty','widget-bank-log-count');
+  if(!log || log.length===0){
+    logEl.innerHTML='';
+    emptyEl.style.display='block';
+    countEl.textContent='0 entries';
+  } else {
+    emptyEl.style.display='none';
+    countEl.textContent = log.length + (log.length===1?' entry':' entries');
+    logEl.innerHTML = log.map((e,i)=>`
+      <div class="bank-log-row${i===0?' new-entry':''}">
+        <span class="bank-log-time">${e.time}</span>
+        <span class="bank-log-action">${e.action}</span>
+        <span class="bank-log-pts">+${e.pts}</span>
+      </div>`).join('');
+  }
 }
 
 function showLoggedIn(user){
@@ -1249,7 +1249,6 @@ function signOut(){
   document.getElementById('ad-overlay').style.display='none';
   document.getElementById('hero-points').style.display='none';
   document.getElementById('hero-btns').style.display='flex';
-  document.getElementById('points-bank-widget').style.display='none';
 }
 
 function toggleNavBank(){
@@ -1292,7 +1291,6 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     sessionStorage.setItem('total_points', total);
     sessionStorage.setItem('points_log', JSON.stringify(log));
     showLoggedIn(user);
-    document.getElementById('points-bank-widget').style.display='block';
   }
 });
 </script>
