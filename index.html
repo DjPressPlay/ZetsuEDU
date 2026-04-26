@@ -735,7 +735,54 @@ footer{
     <li><a href="#news">Feed</a></li>
     <li><a href="#ref">Refer</a></li>
   </ul>
+
+  <!-- JOIN NOW (logged out) -->
   <a class="nav-cta" id="nav-cta" href="#" onclick="openModal('signup');return false">Join Now</a>
+
+  <!-- NAV BANK TRIGGER (logged in, replaces join now) -->
+  <div id="nav-bank-trigger" style="display:none;position:relative;">
+    <div onclick="toggleNavBank()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 14px;border:1px solid #2a2a2a;background:#0d0d0d;transition:border-color .2s;" id="nav-bank-btn">
+      <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #c8ff00;display:grid;place-items:center;">
+        <div style="width:5px;height:5px;border-radius:50%;background:#c8ff00;box-shadow:0 0 4px #c8ff00;"></div>
+      </div>
+      <span id="nav-bank-pts" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#c8ff00;letter-spacing:2px;line-height:1;">0</span>
+      <span style="font-size:9px;letter-spacing:2px;color:#444;text-transform:uppercase;">PTS</span>
+      <span id="nav-bank-chevron" style="font-size:9px;color:#444;margin-left:2px;">▼</span>
+    </div>
+
+    <!-- DROPDOWN PANEL -->
+    <div id="nav-bank-panel" style="display:none;position:absolute;top:calc(100% + 12px);right:0;width:320px;z-index:200;">
+      <div class="bank-card">
+        <!-- Balance -->
+        <div class="bank-balance" style="padding:16px 20px 14px;">
+          <div class="bank-balance-label">Available Balance</div>
+          <div class="bank-balance-amount" id="bank-total" style="font-size:52px;">0</div>
+          <div class="bank-pts-label">SIGZ POINTS</div>
+          <div class="bank-last-badge">
+            <div class="bank-last-label">Last Earned</div>
+            <div class="bank-last-val" id="bank-last">—</div>
+          </div>
+        </div>
+
+        <!-- Log -->
+        <div class="bank-log-header">
+          <span class="bank-log-title">Transaction Log</span>
+          <span class="bank-log-count" id="bank-log-count">0 entries</span>
+        </div>
+        <div class="bank-log-inner" id="bank-log" style="max-height:180px;"></div>
+        <div class="bank-empty" id="bank-empty">No transactions yet</div>
+
+        <!-- Footer -->
+        <div class="bank-footer" style="justify-content:space-between;">
+          <div class="bank-sync">
+            <div class="bank-sync-dot" id="bank-sync-dot"></div>
+            <span class="bank-sync-txt" id="bank-sync-txt">NOT SYNCED</span>
+          </div>
+          <button onclick="signOut()" style="background:none;border:none;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:#333;text-transform:uppercase;cursor:pointer;transition:color .15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#333'">SIGN OUT</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -773,25 +820,182 @@ footer{
   </div>
 </div>
 
-<!-- POINTS BANK OVERLAY -->
-<div id="points-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:32px">
-  <button onclick="closePointsBank()" style="position:absolute;top:32px;right:40px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;color:#fff;font-family:monospace">&#x2715;</button>
-  <p style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#f2f0eb">POINTS BANK</p>
-  <div style="display:flex;gap:1px;background:#1e1e1e">
-    <div style="background:#111;padding:32px 48px;text-align:center">
-      <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:8px">Total Points</div>
-      <div id="bank-total" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#c8ff00;line-height:1">0</div>
-    </div>
-    <div style="background:#111;padding:32px 48px;text-align:center">
-      <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:8px">Last Earned</div>
-      <div id="bank-last" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#f2f0eb;line-height:1">—</div>
-    </div>
-  </div>
-  <div style="width:560px;max-width:90vw">
-    <div style="font-size:10px;letter-spacing:3px;color:#666;text-transform:uppercase;margin-bottom:16px">Earnings Log</div>
-    <div id="bank-log" style="background:#111;border:1px solid #1e1e1e;max-height:200px;overflow-y:auto"></div>
-  </div>
-</div>
+<!-- POINTS BANK WIDGET -->
+<style>
+#points-bank-widget{
+  display:none;
+  position:fixed;
+  bottom:24px;right:24px;
+  z-index:500;
+  width:320px;
+  font-family:'Space Mono',monospace;
+  filter:drop-shadow(0 0 24px rgba(200,255,0,0.15));
+}
+.bank-card{
+  background:linear-gradient(160deg,#0e0e0e 0%,#141414 60%,#0a0a0a 100%);
+  border:1px solid #2a2a2a;
+  border-radius:2px;
+  overflow:hidden;
+  position:relative;
+}
+.bank-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#c8ff00,transparent);
+}
+.bank-header{
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  border-bottom:1px solid #1a1a1a;
+  user-select:none;
+}
+.bank-header:hover{ background:rgba(200,255,0,0.03); }
+.bank-logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.bank-chip{
+  width:20px;height:20px;
+  border-radius:50%;
+  border:2px solid #c8ff00;
+  display:grid;place-items:center;
+  position:relative;
+}
+.bank-chip::before{
+  content:'';
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#c8ff00;
+  box-shadow:0 0 6px #c8ff00;
+}
+.bank-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;
+  letter-spacing:4px;
+  color:#888;
+}
+.bank-header-right{
+  display:flex;align-items:center;gap:10px;
+}
+.bank-live{
+  display:flex;align-items:center;gap:4px;
+  font-size:8px;letter-spacing:2px;color:#444;text-transform:uppercase;
+}
+.bank-live-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:#c8ff00;
+  box-shadow:0 0 4px #c8ff00;
+  animation:blink 1.4s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.bank-toggle{
+  font-size:10px;color:#444;
+  transition:transform .25s;
+}
+/* Balance section */
+.bank-balance{
+  padding:20px 20px 16px;
+  position:relative;
+  border-bottom:1px solid #141414;
+}
+.bank-balance-label{
+  font-size:8px;letter-spacing:4px;color:#444;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.bank-balance-amount{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:64px;
+  line-height:1;
+  color:#c8ff00;
+  text-shadow:0 0 30px rgba(200,255,0,0.4);
+  transition:all .2s;
+  letter-spacing:2px;
+}
+.bank-balance-amount.flash{
+  text-shadow:0 0 60px rgba(200,255,0,0.9);
+  color:#fff;
+}
+.bank-pts-label{
+  font-size:10px;letter-spacing:4px;color:#444;
+  text-transform:uppercase;margin-top:2px;
+}
+.bank-last-badge{
+  position:absolute;
+  top:20px;right:20px;
+  background:rgba(200,255,0,0.08);
+  border:1px solid rgba(200,255,0,0.2);
+  border-radius:2px;
+  padding:6px 12px;
+  text-align:center;
+}
+.bank-last-label{font-size:7px;letter-spacing:3px;color:#444;text-transform:uppercase;margin-bottom:2px;}
+.bank-last-val{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;color:#c8ff00;line-height:1;
+}
+/* Log section */
+.bank-log-wrap{
+  overflow:hidden;
+  transition:max-height .3s ease;
+  max-height:300px;
+}
+.bank-log-header{
+  padding:10px 20px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #111;
+}
+.bank-log-title{font-size:8px;letter-spacing:4px;color:#333;text-transform:uppercase;}
+.bank-log-count{font-size:8px;letter-spacing:2px;color:#c8ff00;}
+.bank-log-inner{
+  max-height:160px;
+  overflow-y:auto;
+}
+.bank-log-inner::-webkit-scrollbar{width:2px}
+.bank-log-inner::-webkit-scrollbar-track{background:#0a0a0a}
+.bank-log-inner::-webkit-scrollbar-thumb{background:#c8ff00}
+.bank-log-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 20px;
+  border-bottom:1px solid #0f0f0f;
+  transition:background .15s;
+}
+.bank-log-row:hover{background:rgba(200,255,0,0.03)}
+.bank-log-row.new-entry{
+  animation:slideIn .3s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.bank-log-time{font-size:8px;color:#333;letter-spacing:1px;min-width:70px;}
+.bank-log-action{font-size:9px;color:#555;letter-spacing:1px;flex:1;padding:0 8px;}
+.bank-log-pts{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;color:#c8ff00;
+  letter-spacing:1px;
+}
+.bank-empty{
+  padding:20px;
+  text-align:center;
+  font-size:9px;letter-spacing:3px;color:#222;
+  text-transform:uppercase;
+}
+/* Footer */
+.bank-footer{
+  padding:8px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#090909;
+}
+.bank-sync{display:flex;align-items:center;gap:5px;}
+.bank-sync-dot{width:5px;height:5px;border-radius:50%;background:#333;}
+.bank-sync-txt{font-size:7px;letter-spacing:2px;color:#333;text-transform:uppercase;}
+.bank-footer-brand{font-size:7px;letter-spacing:3px;color:#1e1e1e;text-transform:uppercase;}
+</style>
 
 <!-- AUTH MODAL -->
 <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
@@ -1096,7 +1300,7 @@ async function submitAuth(){
       const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu`,{
         method:'POST',
         headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
-        body:JSON.stringify([{email,encode:encoded,display_name:email.split('@')[0],created_at:new Date().toISOString()}])
+        body:JSON.stringify([{email,encode:encoded,display_name:email.split('@')[0],created_at:new Date().toISOString(),points:0,points_log:'[]'}])
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.message||'Signup failed');
@@ -1122,19 +1326,119 @@ async function submitAuth(){
   }
 }
 
-function showAd(user){
+async function showAd(user){
   sessionStorage.setItem('pending_user', JSON.stringify(user));
+  const {total, log} = await loadPointsFromSupabase(user);
+  sessionStorage.setItem('total_points', total);
+  sessionStorage.setItem('points_log', JSON.stringify(log));
   document.getElementById('ad-overlay').style.display='flex';
 }
 
-function claimPoints(){
+let navBankOpen = false;
+
+function toggleNavBank(){
+  navBankOpen = !navBankOpen;
+  const panel = document.getElementById('nav-bank-panel');
+  const chevron = document.getElementById('nav-bank-chevron');
+  const btn = document.getElementById('nav-bank-btn');
+  panel.style.display = navBankOpen ? 'block' : 'none';
+  chevron.textContent = navBankOpen ? '▲' : '▼';
+  btn.style.borderColor = navBankOpen ? '#c8ff00' : '#2a2a2a';
+}
+
+// close panel when clicking outside
+document.addEventListener('click', function(e){
+  const trigger = document.getElementById('nav-bank-trigger');
+  if(trigger && !trigger.contains(e.target)){
+    navBankOpen = false;
+    const panel = document.getElementById('nav-bank-panel');
+    const chevron = document.getElementById('nav-bank-chevron');
+    const btn = document.getElementById('nav-bank-btn');
+    if(panel) panel.style.display='none';
+    if(chevron) chevron.textContent='▼';
+    if(btn) btn.style.borderColor='#2a2a2a';
+  }
+});
+
+function setSyncStatus(state){
+  const dot = document.getElementById('bank-sync-dot');
+  const txt = document.getElementById('bank-sync-txt');
+  if(state==='synced'){ dot.style.background='#c8ff00'; dot.style.boxShadow='0 0 4px #c8ff00'; txt.style.color='#555'; txt.textContent='SYNCED'; }
+  else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
+  else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
+}
+
+function animateBalance(newVal){
+  const el = document.getElementById('bank-total');
+  el.classList.add('flash');
+  el.textContent = newVal;
+  setTimeout(()=>el.classList.remove('flash'), 400);
+  // also update nav trigger
+  const navPts = document.getElementById('nav-bank-pts');
+  if(navPts) navPts.textContent = newVal;
+}
+
+function renderBankWidget(total, log, lastEarned){
+  animateBalance(total);
+  document.getElementById('bank-last').textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
+  document.getElementById('hero-points-val').textContent = total;
+
+  const logEl = document.getElementById('bank-log');
+  const emptyEl = document.getElementById('bank-empty');
+  const countEl = document.getElementById('bank-log-count');
+
+  if(!log || log.length===0){
+    logEl.innerHTML='';
+    emptyEl.style.display='block';
+    countEl.textContent='0 entries';
+  } else {
+    emptyEl.style.display='none';
+    countEl.textContent = log.length + (log.length===1?' entry':' entries');
+    logEl.innerHTML = log.map((e,i)=>`
+      <div class="bank-log-row${i===0?' new-entry':''}">
+        <span class="bank-log-time">${e.time}</span>
+        <span class="bank-log-action">${e.action}</span>
+        <span class="bank-log-pts">+${e.pts}</span>
+      </div>`).join('');
+  }
+}
+
+async function syncPointsToSupabase(user, total, log){
+  setSyncStatus('syncing');
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
+      method:'PATCH',
+      headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
+      body:JSON.stringify({points: total, points_log: JSON.stringify(log)})
+    });
+    if(!res.ok) throw new Error('patch failed');
+    setSyncStatus('synced');
+  } catch(e){
+    setSyncStatus('error');
+  }
+}
+
+async function claimPoints(){
   document.getElementById('ad-overlay').style.display='none';
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
   const pts = 10;
-  addPointsLog(user, pts);
+
+  // build log entry
+  const adUrl = document.getElementById('claim-link').href;
+  const entry = {pts, time: new Date().toLocaleTimeString(), action:'Ad Watch', ad_url: adUrl, ts: Date.now()};
+  const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
+  log.unshift(entry);
+  sessionStorage.setItem('points_log', JSON.stringify(log));
+  const total = (parseInt(sessionStorage.getItem('total_points')||'0')) + pts;
+  sessionStorage.setItem('total_points', total);
+
   showLoggedIn(user);
-  openPointsBank(pts);
+  document.getElementById('points-bank-widget').style.display='block';
+  renderBankWidget(total, log, pts);
+
+  // sync to supabase
+  await syncPointsToSupabase(user, total, log);
 }
 
 function skipAd(){
@@ -1142,48 +1446,56 @@ function skipAd(){
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
   showLoggedIn(user);
-}
-
-function addPointsLog(user, pts){
+  document.getElementById('points-bank-widget').style.display='block';
+  const total = parseInt(sessionStorage.getItem('total_points')||'0');
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
-  log.unshift({pts, time: new Date().toLocaleTimeString(), action:'Ad Watch'});
-  sessionStorage.setItem('points_log', JSON.stringify(log));
-  const total = (parseInt(sessionStorage.getItem('total_points')||'0')) + pts;
-  sessionStorage.setItem('total_points', total);
+  renderBankWidget(total, log, undefined);
 }
 
-function openPointsBank(lastEarned){
-  const total = sessionStorage.getItem('total_points')||'0';
-  const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
-  document.getElementById('bank-total').textContent = total;
-  document.getElementById('bank-last').textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
-  const logEl = document.getElementById('bank-log');
-  logEl.innerHTML = log.map(e=>`<div style="display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #1e1e1e;font-size:11px;letter-spacing:1px"><span style="color:#666">${e.time}</span><span>${e.action}</span><span style="color:#c8ff00">+${e.pts} PTS</span></div>`).join('');
-  document.getElementById('points-overlay').style.display='flex';
-}
-
-function closePointsBank(){
-  document.getElementById('points-overlay').style.display='none';
+async function loadPointsFromSupabase(user){
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
+      headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
+    });
+    const data = await res.json();
+    if(data && data[0]){
+      const total = data[0].points || 0;
+      const log = data[0].points_log ? JSON.parse(data[0].points_log) : [];
+      sessionStorage.setItem('total_points', total);
+      sessionStorage.setItem('points_log', JSON.stringify(log));
+      return {total, log};
+    }
+  } catch(e){}
+  return {total:0, log:[]};
 }
 
 function showLoggedIn(user){
   const currentTotal = parseInt(sessionStorage.getItem('total_points')||'0');
-  const nc = document.getElementById('nav-cta');
-  if(nc){ nc.textContent=(user?.display_name||user?.email||'USER').toUpperCase(); nc.onclick=function(){return false;} }
+  // swap join now → bank trigger
+  document.getElementById('nav-cta').style.display='none';
+  document.getElementById('nav-bank-trigger').style.display='block';
+  document.getElementById('nav-bank-pts').textContent = currentTotal;
+  // hero
   document.getElementById('hero-btns').style.display='none';
-  const ptsPanel = document.getElementById('hero-points');
-  ptsPanel.style.display='flex';
+  document.getElementById('hero-points').style.display='flex';
   document.getElementById('hero-user-val').textContent=(user?.display_name||user?.email||'USER').toUpperCase();
   document.getElementById('hero-points-val').textContent=currentTotal;
+  // render bank
+  const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
+  renderBankWidget(currentTotal, log, undefined);
+  setSyncStatus('synced');
 }
 
 function signOut(){
-  const nc = document.getElementById('nav-cta');
-  if(nc){ nc.textContent='Join Now'; nc.onclick=function(){openModal('signup');return false;} }
+  document.getElementById('nav-cta').style.display='block';
+  document.getElementById('nav-bank-trigger').style.display='none';
+  document.getElementById('nav-bank-panel').style.display='none';
+  navBankOpen = false;
   sessionStorage.removeItem('ztab_user');
   sessionStorage.removeItem('pending_user');
+  sessionStorage.removeItem('total_points');
+  sessionStorage.removeItem('points_log');
   document.getElementById('ad-overlay').style.display='none';
-  document.getElementById('ad-claim-btn').style.display='none';
   document.getElementById('hero-points').style.display='none';
   document.getElementById('hero-btns').style.display='flex';
 }
@@ -1197,9 +1509,15 @@ function copyRef(){
   });
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  const user = sessionStorage.getItem('ztab_user');
-  if(user) showLoggedIn(JSON.parse(user));
+document.addEventListener('DOMContentLoaded', async ()=>{
+  const stored = sessionStorage.getItem('ztab_user');
+  if(stored){
+    const user = JSON.parse(stored);
+    const {total, log} = await loadPointsFromSupabase(user);
+    sessionStorage.setItem('total_points', total);
+    sessionStorage.setItem('points_log', JSON.stringify(log));
+    showLoggedIn(user);
+  }
 });
 </script>
 </body>
