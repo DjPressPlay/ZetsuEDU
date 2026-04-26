@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
+ 
 :root{
   --black:#030303;
   --off-black:#0d0d0d;
@@ -22,9 +22,9 @@
   --mono:'Space Mono',monospace;
   --display:'Bebas Neue',sans-serif;
 }
-
+ 
 html{scroll-behavior:smooth}
-
+ 
 body{
   background:var(--black);
   color:var(--white);
@@ -33,7 +33,7 @@ body{
   line-height:1.6;
   overflow-x:hidden;
 }
-
+ 
 /* ─── NAV ─── */
 nav{
   position:fixed;
@@ -84,7 +84,7 @@ nav{
   transition:opacity .15s;
 }
 .nav-cta:hover{opacity:.85}
-
+ 
 /* ─── HERO ─── */
 #hero{
   min-height:100vh;
@@ -168,7 +168,7 @@ nav{
   transition:border-color .15s,color .15s;
 }
 .btn-ghost:hover{border-color:var(--white);color:var(--white)}
-
+ 
 /* ─── SECTIONS ─── */
 section{
   padding:100px 40px;
@@ -193,7 +193,7 @@ section{
   color:var(--accent);
 }
 .container{max-width:1100px;margin:0 auto}
-
+ 
 /* ─── USER FLOW ─── */
 #flow{background:var(--off-black)}
 .flow-track{
@@ -224,7 +224,7 @@ section{
   padding:0 8px;
   flex-shrink:0;
 }
-
+ 
 /* ─── SHOP ─── */
 #shop .shop-grid{
   display:grid;
@@ -265,7 +265,7 @@ section{
   font-size:22px;
   letter-spacing:2px;
 }
-
+ 
 /* ─── WHAT IS ─── */
 #what{background:var(--off-black)}
 .what-grid{
@@ -304,7 +304,7 @@ section{
   text-transform:uppercase;
   color:var(--muted);
 }
-
+ 
 /* ─── WHAT WE DO ─── */
 .do-grid{
   display:grid;
@@ -362,7 +362,7 @@ section{
   transition:border-color .15s,color .15s;
 }
 .do-card-link:hover{color:var(--accent);border-color:var(--accent)}
-
+ 
 /* ─── EMAIL ─── */
 #email{
   background:var(--accent);
@@ -404,7 +404,7 @@ section{
   transition:opacity .15s;
 }
 .email-submit:hover{opacity:.85}
-
+ 
 /* ─── NEWSLETTER ─── */
 #news{background:var(--off-black)}
 .news-grid{
@@ -440,7 +440,7 @@ section{
   color:var(--muted);
   letter-spacing:2px;
 }
-
+ 
 /* ─── REFERRAL ─── */
 #ref{
   background:var(--panel);
@@ -487,7 +487,7 @@ section{
   white-space:nowrap;
 }
 .ref-copy-btn:hover{border-color:var(--white);color:var(--white)}
-
+ 
 /* ─── ADS ─── */
 #ads{background:var(--off-black)}
 .ad-split{
@@ -521,7 +521,7 @@ section{
   );
 }
 .ad-text p{color:var(--muted);font-size:13px;line-height:2;margin-bottom:24px}
-
+ 
 /* ─── FINAL CTA ─── */
 #cta{
   background:var(--black);
@@ -530,7 +530,7 @@ section{
 }
 #cta .section-title{font-size:clamp(52px,8vw,110px);margin-bottom:24px}
 #cta p{color:var(--muted);font-size:13px;margin-bottom:48px}
-
+ 
 /* ─── FOOTER ─── */
 footer{
   border-top:1px solid var(--border);
@@ -569,7 +569,7 @@ footer{
   padding-top:24px;
   margin-top:0;
 }
-
+ 
 /* ─── TICKER ─── */
 .ticker-wrap{
   background:var(--accent);
@@ -590,7 +590,7 @@ footer{
   margin:0 40px;
 }
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
+ 
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   nav{padding:0 20px}
@@ -606,7 +606,7 @@ footer{
   .email-form{flex-direction:column}
   .ref-link-display{flex-direction:column;align-items:flex-start}
 }
-
+ 
 /* ─── POINTS BANK ─── */
 #points-bank-widget{
   display:none;
@@ -712,7 +712,7 @@ footer{
 </style>
 </head>
 <body>
-
+ 
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">ZETSUEDU</a>
@@ -722,9 +722,9 @@ footer{
     <li><a href="#news">Feed</a></li>
     <li><a href="#ref">Refer</a></li>
   </ul>
-
+ 
   <a class="nav-cta" id="nav-cta" href="#" onclick="openModal('signup');return false">Join Now</a>
-
+ 
   <div id="nav-bank-trigger" style="display:none;position:relative;">
     <div onclick="toggleNavBank()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 14px;border:1px solid #2a2a2a;background:#0d0d0d;transition:border-color .2s;" id="nav-bank-btn">
       <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #c8ff00;display:grid;place-items:center;">
@@ -745,6 +745,31 @@ footer{
             <div class="bank-last-val" id="bank-last">—</div>
           </div>
         </div>
+        <!-- EXCHANGE -->
+        <div style="padding:10px 12px 8px;border-bottom:1px solid #111;">
+          <div style="font-size:8px;letter-spacing:4px;color:#333;text-transform:uppercase;margin-bottom:8px;">Exchange Points</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+            <div style="background:#0a0a0a;border:1px solid #1e1e1e;padding:8px 6px;text-align:center;">
+              <div style="font-size:7px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:4px;">\ Discount Ticket</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#c8ff00;line-height:1;margin-bottom:2px;">50 PTS</div>
+              <div id="ticket-1-count" style="font-size:7px;letter-spacing:1px;color:#444;margin-bottom:6px;">0/5</div>
+              <button onclick="exchangeTicket(1,50)" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 0;width:100%;cursor:pointer;" >EXCHANGE</button>
+            </div>
+            <div style="background:#0a0a0a;border:1px solid #1e1e1e;padding:8px 6px;text-align:center;">
+              <div style="font-size:7px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:4px;">\ Discount Ticket</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#c8ff00;line-height:1;margin-bottom:2px;">250 PTS</div>
+              <div id="ticket-5-count" style="font-size:7px;letter-spacing:1px;color:#444;margin-bottom:6px;">0/5</div>
+              <button onclick="exchangeTicket(5,250)" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 0;width:100%;cursor:pointer;">EXCHANGE</button>
+            </div>
+            <div style="background:#0a0a0a;border:1px solid #1e1e1e;padding:8px 6px;text-align:center;">
+              <div style="font-size:7px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:4px;"> Discount Ticket</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#c8ff00;line-height:1;margin-bottom:2px;">500 PTS</div>
+              <div id="ticket-10-count" style="font-size:7px;letter-spacing:1px;color:#444;margin-bottom:6px;">0/5</div>
+              <button onclick="exchangeTicket(10,500)" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:4px 0;width:100%;cursor:pointer;">EXCHANGE</button>
+            </div>
+          </div>
+          <div id="exchange-msg" style="font-size:7px;letter-spacing:2px;color:#555;text-align:center;min-height:12px;margin-top:6px;text-transform:uppercase;"></div>
+        </div>
         <div class="bank-log-header">
           <span class="bank-log-title">Transaction Log</span>
           <span class="bank-log-count" id="bank-log-count">0 entries</span>
@@ -762,7 +787,7 @@ footer{
     </div>
   </div>
 </nav>
-
+ 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-grid"></div>
@@ -787,7 +812,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- AD OVERLAY -->
 <div id="ad-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.95);flex-direction:column;align-items:center;justify-content:center;gap:32px">
   <p style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;color:#f2f0eb">EARN POINTS</p>
@@ -797,9 +822,9 @@ footer{
     <button onclick="skipAd()" style="background:transparent;color:#f2f0eb;border:1px solid #2e2e2e;padding:16px 48px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">SKIP</button>
   </div>
 </div>
-
-
-
+ 
+ 
+ 
 <!-- AUTH MODAL -->
 <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
   <div style="background:#111;border:1px solid #2e2e2e;padding:48px 40px;width:360px;position:relative">
@@ -816,7 +841,7 @@ footer{
     </div>
   </div>
 </div>
-
+ 
 <!-- HOW IT WORKS -->
 <section id="flow" style="padding:40px 40px;">
   <div class="container">
@@ -864,7 +889,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- SHOP -->
 <section id="shop">
   <div class="container">
@@ -878,7 +903,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- WHAT IS ZETSU -->
 <section id="what">
   <div class="container">
@@ -899,7 +924,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- WHAT WE DO -->
 <section id="do">
   <div class="container">
@@ -930,7 +955,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- EMAIL SIGNUP -->
 <section id="email" style="padding:0">
   <div style="background:var(--accent);padding:100px 40px;text-align:center;border-top:1px solid var(--border)">
@@ -943,7 +968,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- NEWSLETTER -->
 <section id="news">
   <div class="container">
@@ -958,7 +983,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- REFERRAL -->
 <section id="ref">
   <div class="container">
@@ -974,7 +999,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- ADS -->
 <section id="ads">
   <div class="container">
@@ -991,7 +1016,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- FINAL CTA -->
 <section id="cta">
   <div class="container">
@@ -1001,7 +1026,7 @@ footer{
     <a class="btn-primary" style="font-size:14px;padding:18px 52px;letter-spacing:4px" href="#email">ENTER ZETSU</a>
   </div>
 </section>
-
+ 
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">ZETSUEDU</div>
@@ -1013,18 +1038,18 @@ footer{
   </ul>
   <p class="footer-copy">© 2025 The Zetsumetsu Corporation &nbsp;•&nbsp; Detroit, MI &nbsp;•&nbsp; All rights reserved.</p>
 </footer>
-
+ 
 <script>
 const SB_URL = 'https://jqvnrdjrkdjgjbmqmbbl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impxdm5yZGpya2RqZ2pibXFtYmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTIwOTcsImV4cCI6MjA2NjgyODA5N30.5hMfCI3jir8PK2Aa1Z6w152EGYGSQFlPysk4CaxpmI8';
 let authMode = 'login';
 let navBankOpen = false;
-
+ 
 async function sha256(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
+ 
 function openModal(mode){
   authMode = mode;
   document.getElementById('auth-modal').style.display='flex';
@@ -1032,24 +1057,24 @@ function openModal(mode){
   document.getElementById('auth-confirm-wrap').style.display = mode==='signup' ? 'block' : 'none';
   document.getElementById('auth-msg').textContent='';
 }
-
+ 
 function closeModal(){
   document.getElementById('auth-modal').style.display='none';
 }
-
+ 
 async function submitAuth(){
   const email = document.getElementById('auth-email').value.trim();
   const pass = document.getElementById('auth-pass').value.trim();
   const confirm = document.getElementById('auth-confirm')?.value.trim();
   const msg = document.getElementById('auth-msg');
   const btn = document.getElementById('auth-submit');
-
+ 
   if(!email || !pass){ msg.textContent='EMAIL AND PASSWORD REQUIRED'; return; }
   if(authMode==='signup' && pass!==confirm){ msg.textContent="PASSWORDS DON'T MATCH"; return; }
-
+ 
   btn.textContent='...'; btn.disabled=true;
   const encoded = await sha256(pass);
-
+ 
   try {
     if(authMode==='signup'){
       const check = await fetch(`${SB_URL}/rest/v1/zetsu_edu?email=eq.${encodeURIComponent(email)}`,{
@@ -1057,7 +1082,7 @@ async function submitAuth(){
       });
       const existing = await check.json();
       if(existing.length > 0){ msg.textContent='ACCOUNT ALREADY EXISTS'; btn.textContent='SUBMIT'; btn.disabled=false; return; }
-
+ 
       const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu`,{
         method:'POST',
         headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
@@ -1068,7 +1093,7 @@ async function submitAuth(){
       sessionStorage.setItem('ztab_user', JSON.stringify(data[0]));
       closeModal();
       showAd(data[0]);
-
+ 
     } else {
       const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?email=eq.${encodeURIComponent(email)}`,{
         headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
@@ -1086,7 +1111,7 @@ async function submitAuth(){
     btn.textContent='SUBMIT'; btn.disabled=false;
   }
 }
-
+ 
 async function showAd(user){
   sessionStorage.setItem('pending_user', JSON.stringify(user));
   const {total, log} = await loadPointsFromSupabase(user);
@@ -1094,26 +1119,26 @@ async function showAd(user){
   sessionStorage.setItem('points_log', JSON.stringify(log));
   document.getElementById('ad-overlay').style.display='flex';
 }
-
+ 
 async function claimPoints(){
   document.getElementById('ad-overlay').style.display='none';
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
   const pts = 10;
-
+ 
   const entry = {pts, time: new Date().toLocaleTimeString(), action:'Ad Watch', ts: Date.now()};
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
   log.unshift(entry);
   sessionStorage.setItem('points_log', JSON.stringify(log));
   const total = (parseInt(sessionStorage.getItem('total_points')||'0')) + pts;
   sessionStorage.setItem('total_points', total);
-
+ 
   showLoggedIn(user);
   renderBankWidget(total, log, pts);
-
+ 
   await syncPointsToSupabase(user, total, log);
 }
-
+ 
 function skipAd(){
   document.getElementById('ad-overlay').style.display='none';
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
@@ -1123,7 +1148,7 @@ function skipAd(){
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
   renderBankWidget(total, log, undefined);
 }
-
+ 
 async function syncPointsToSupabase(user, total, log){
   setSyncStatus('syncing');
   try {
@@ -1138,7 +1163,7 @@ async function syncPointsToSupabase(user, total, log){
     setSyncStatus('error');
   }
 }
-
+ 
 async function loadPointsFromSupabase(user){
   try {
     const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
@@ -1156,7 +1181,7 @@ async function loadPointsFromSupabase(user){
   } catch(e){}
   return {total:0, log:[]};
 }
-
+ 
 function setSyncStatus(state){
   const dot = document.getElementById('bank-sync-dot');
   const txt = document.getElementById('bank-sync-txt');
@@ -1165,7 +1190,7 @@ function setSyncStatus(state){
   else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
   else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
 }
-
+ 
 function animateBalance(newVal){
   const el = document.getElementById('bank-total');
   if(el){
@@ -1176,20 +1201,20 @@ function animateBalance(newVal){
   const navPts = document.getElementById('nav-bank-pts');
   if(navPts) navPts.textContent = newVal;
 }
-
+ 
 function renderBankWidget(total, log, lastEarned){
   animateBalance(total);
-
+ 
   const lastEl = document.getElementById('bank-last');
   if(lastEl) lastEl.textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
-
+ 
   document.getElementById('hero-points-val').textContent = total;
-
+ 
   const logEl = document.getElementById('bank-log');
   const emptyEl = document.getElementById('bank-empty');
   const countEl = document.getElementById('bank-log-count');
   if(!logEl||!emptyEl||!countEl) return;
-
+ 
   if(!log || log.length===0){
     logEl.innerHTML='';
     emptyEl.style.display='block';
@@ -1205,7 +1230,7 @@ function renderBankWidget(total, log, lastEarned){
       </div>`).join('');
   }
 }
-
+ 
 function showLoggedIn(user){
   const currentTotal = parseInt(sessionStorage.getItem('total_points')||'0');
   document.getElementById('nav-cta').style.display='none';
@@ -1219,7 +1244,7 @@ function showLoggedIn(user){
   renderBankWidget(currentTotal, log, undefined);
   setSyncStatus('synced');
 }
-
+ 
 function signOut(){
   document.getElementById('nav-cta').style.display='block';
   document.getElementById('nav-bank-trigger').style.display='none';
@@ -1233,7 +1258,7 @@ function signOut(){
   document.getElementById('hero-points').style.display='none';
   document.getElementById('hero-btns').style.display='flex';
 }
-
+ 
 function toggleNavBank(){
   navBankOpen = !navBankOpen;
   const panel = document.getElementById('nav-bank-panel');
@@ -1242,8 +1267,9 @@ function toggleNavBank(){
   panel.style.display = navBankOpen ? 'block' : 'none';
   chevron.textContent = navBankOpen ? '▲' : '▼';
   btn.style.borderColor = navBankOpen ? '#c8ff00' : '#2a2a2a';
+  if(navBankOpen) renderTicketCounts();
 }
-
+ 
 document.addEventListener('click', function(e){
   const trigger = document.getElementById('nav-bank-trigger');
   if(trigger && !trigger.contains(e.target)){
@@ -1256,7 +1282,46 @@ document.addEventListener('click', function(e){
     if(btn) btn.style.borderColor='#2a2a2a';
   }
 });
-
+ 
+function exchangeTicket(value, cost){
+  const total = parseInt(sessionStorage.getItem("total_points")||"0");
+  const tickets = JSON.parse(sessionStorage.getItem("tickets")||'{"1":0,"5":0,"10":0}');
+  const msg = document.getElementById("exchange-msg");
+ 
+  if(total < cost){ msg.style.color="#ff3232"; msg.textContent="NOT ENOUGH POINTS"; setTimeout(()=>msg.textContent="",2000); return; }
+  if(tickets[value] >= 5){ msg.style.color="#ff3232"; msg.textContent="MAX TICKETS REACHED"; setTimeout(()=>msg.textContent="",2000); return; }
+ 
+  tickets[value]++;
+  const newTotal = total - cost;
+  sessionStorage.setItem("tickets", JSON.stringify(tickets));
+  sessionStorage.setItem("total_points", newTotal);
+ 
+  const log = JSON.parse(sessionStorage.getItem("points_log")||"[]");
+  const entry = {pts: -cost, time: new Date().toLocaleTimeString(), action: "$"+value+" Discount Ticket", ts: Date.now()};
+  log.unshift(entry);
+  sessionStorage.setItem("points_log", JSON.stringify(log));
+ 
+  animateBalance(newTotal);
+  document.getElementById("hero-points-val").textContent = newTotal;
+  document.getElementById("ticket-"+value+"-count").textContent = tickets[value]+"/5";
+  renderBankWidget(newTotal, log, undefined);
+ 
+  msg.style.color="#c8ff00";
+  msg.textContent="TICKET ADDED TO WALLET";
+  setTimeout(()=>msg.textContent="",2000);
+ 
+  const user = JSON.parse(sessionStorage.getItem("ztab_user")||"null");
+  if(user) syncPointsToSupabase(user, newTotal, log);
+}
+ 
+function renderTicketCounts(){
+  const tickets = JSON.parse(sessionStorage.getItem("tickets")||'{"1":0,"5":0,"10":0}');
+  [1,5,10].forEach(v=>{
+    const el = document.getElementById("ticket-"+v+"-count");
+    if(el) el.textContent = (tickets[v]||0)+"/5";
+  });
+}
+ 
 function copyRef(){
   const txt=document.getElementById('ref-link-text').textContent;
   navigator.clipboard.writeText(txt).then(()=>{
@@ -1265,7 +1330,7 @@ function copyRef(){
     setTimeout(()=>{btn.textContent='COPY'},2000);
   });
 }
-
+ 
 document.addEventListener('DOMContentLoaded', async ()=>{
   const stored = sessionStorage.getItem('ztab_user');
   if(stored){
@@ -1279,3 +1344,4 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 </script>
 </body>
 </html>
+ 
