@@ -596,6 +596,8 @@ footer{
   nav{padding:0 20px}
   .nav-links{display:none}
   section{padding:72px 20px}
+  #flow{padding:32px 20px !important;}
+  #flow .container > div:last-child{grid-template-columns:repeat(2,1fr) !important;}
   .what-grid,.ad-split{grid-template-columns:1fr}
   .do-grid{grid-template-columns:1fr}
   .flow-track{flex-direction:column;align-items:flex-start;gap:8px}
@@ -737,7 +739,7 @@ footer{
         <div class="bank-balance" style="padding:16px 20px 14px;">
           <div class="bank-balance-label">Available Balance</div>
           <div class="bank-balance-amount" id="bank-total" style="font-size:52px;">0</div>
-          <div class="bank-pts-label">SIGZ POINTS</div>
+          <div class="bank-pts-label">DIGITAL TOKENS</div>
           <div class="bank-last-badge">
             <div class="bank-last-label">Last Earned</div>
             <div class="bank-last-val" id="bank-last">—</div>
@@ -816,68 +818,49 @@ footer{
 </div>
 
 <!-- HOW IT WORKS -->
-<section id="flow">
+<section id="flow" style="padding:40px 40px;">
   <div class="container">
-    <p class="section-label">System Loop</p>
-    <h2 class="section-title">How It <em>Works</em></h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:48px">
-
-      <!-- Container 1 -->
-      <div style="background:var(--panel);padding:48px 40px;display:flex;flex-direction:column;gap:32px">
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">01</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Entry</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Sign In</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Create your account and enter the loop. Your identity is your key to everything inside the reality.</p>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">02</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Action</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Interact</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Move through the system. Every click, post, and engagement generates signal. The loop tracks it all.</p>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">03</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Reward</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Earn Points</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Your actions convert directly into SIGZ points. Stored on your account, visible in real time, ready to spend.</p>
-          </div>
-        </div>
+    <div style="display:flex;align-items:baseline;gap:24px;margin-bottom:20px;">
+      <p class="section-label" style="margin-bottom:0">System Loop</p>
+      <h2 style="font-family:var(--display);font-size:28px;letter-spacing:1px;line-height:1;">How It <em style="font-style:normal;color:var(--accent)">Works</em></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);">
+      <div style="background:var(--panel);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">01</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Entry</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Sign In</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Create your account and enter the loop.</p>
       </div>
-
-      <!-- Container 2 -->
-      <div style="background:var(--off-black);padding:48px 40px;display:flex;flex-direction:column;gap:32px">
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">04</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Engine</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Watch Ads</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Ads are not interruptions here. They are the engine. Watch and earn. Your time has direct purchasing power.</p>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">05</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Exchange</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Spend</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Use your points inside the Zetsu store. Drops, access, items. The stack you build becomes real value.</p>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:24px">
-          <div style="font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;min-width:48px">06</div>
-          <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Network</div>
-            <div style="font-family:var(--display);font-size:28px;margin-bottom:8px">Refer</div>
-            <p style="font-size:12px;color:var(--muted);line-height:1.8">Your referral link compounds automatically. Every person you bring in adds to your stack permanently. No cap.</p>
-          </div>
-        </div>
+      <div style="background:var(--off-black);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">02</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Action</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Interact</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Move through the system. Every click, post, and engagement generates signal. The loop tracks it all.</p>
       </div>
-
+      <div style="background:var(--panel);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">03</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Reward</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Earn Points</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Your actions convert directly into Digital Tokens. Stored on your account, visible in real time, ready to spend.</p>
+      </div>
+      <div style="background:var(--off-black);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">04</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Engine</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Watch Ads</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Ads are the engine. Your time has purchasing power.</p>
+      </div>
+      <div style="background:var(--panel);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">05</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Exchange</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Spend</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Use your points inside the ZETSUEDU store. Drops, access, items. The stack you build becomes real value.</p>
+      </div>
+      <div style="background:var(--off-black);padding:20px 16px;">
+        <div style="font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;margin-bottom:8px;">06</div>
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Network</div>
+        <div style="font-family:var(--display);font-size:18px;margin-bottom:6px;">Refer</div>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;">Your link compounds. Every referral stacks. No cap.</p>
+      </div>
     </div>
   </div>
 </section>
