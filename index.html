@@ -605,123 +605,108 @@ footer{
   .ref-link-display{flex-direction:column;align-items:flex-start}
 }
 
-/* ─── ZTAB AUTH ─── */
-.frameType{
-  border:10px solid #000;
-  border-radius:14px;
+/* ─── POINTS BANK ─── */
+#points-bank-widget{
+  display:none;
+  position:fixed;
+  bottom:24px;right:24px;
+  z-index:500;
+  width:320px;
+  font-family:'Space Mono',monospace;
+  filter:drop-shadow(0 0 24px rgba(200,255,0,0.15));
+}
+.bank-card{
+  background:linear-gradient(160deg,#0e0e0e 0%,#141414 60%,#0a0a0a 100%);
+  border:1px solid #2a2a2a;
+  border-radius:2px;
   overflow:hidden;
-  width:clamp(280px,92vw,340px);
-  box-shadow:0 0 40px rgba(0,0,0,0.8);
   position:relative;
-  font-family:'Orbitron',sans-serif;
 }
-.frameType-inner{
-  border:5px solid transparent;
-  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
-  border-radius:10px;
-  background:radial-gradient(120% 100% at 50% 0%,#1e1e1e 0%,#0e0e0e 70%,#111 100%);
-  padding:14px;
-  position:relative;
-  overflow:hidden;
+.bank-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#c8ff00,transparent);
 }
-.card-header{
-  text-align:center;
-  background:#000;
-  border-bottom:2px solid #4cc9f0;
-  font-size:0.8rem;
-  font-weight:800;
-  text-transform:uppercase;
-  padding:5px;
-  margin-bottom:10px;
+.bank-balance{
+  padding:20px 20px 16px;
   position:relative;
+  border-bottom:1px solid #141414;
+}
+.bank-balance-label{
+  font-size:8px;letter-spacing:4px;color:#444;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.bank-balance-amount{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:64px;
+  line-height:1;
+  color:#c8ff00;
+  text-shadow:0 0 30px rgba(200,255,0,0.4);
+  transition:all .2s;
+  letter-spacing:2px;
+}
+.bank-balance-amount.flash{
+  text-shadow:0 0 60px rgba(200,255,0,0.9);
   color:#fff;
-  font-family:'Orbitron',sans-serif;
 }
-.type-banner{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  border:1.5px solid #4cc9f0;
-  background:#000;
-  border-radius:6px;
-  padding:5px 8px;
-  margin-bottom:12px;
-  position:relative;
+.bank-pts-label{
+  font-size:10px;letter-spacing:4px;color:#444;
+  text-transform:uppercase;margin-top:2px;
 }
-.type-banner button{
-  font-size:0.72rem;
-  font-weight:700;
-  padding:5px 10px;
-  border-radius:5px;
-  border:none;
-  cursor:pointer;
-  background:#1a1a1a;
-  color:#aaa;
-  transition:0.2s;
-  font-family:'Orbitron',sans-serif;
-}
-.type-banner button.active{background:#4cc9f0;color:#000}
-.form-group{margin-bottom:8px}
-.form-group label{font-size:0.65rem;text-align:left;display:block;width:90%;margin:0 auto 3px;color:#bbb;font-family:'Orbitron',sans-serif}
-.form-group input{
-  width:90%;padding:6px;border-radius:5px;
-  border:1px solid #333;background:#0d0d0f;
-  color:#fff;font-size:0.72rem;
-  transition:border-color 0.2s,box-shadow 0.3s;
-  font-family:'Orbitron',sans-serif;
-}
-.form-group input:focus{border-color:#4cc9f0;box-shadow:0 0 6px #4cc9f0;outline:none}
-.submit-btn{
-  width:90%;padding:8px;
-  background:#4cc9f0;color:#000;
-  border:none;border-radius:6px;
-  font-weight:700;font-size:0.8rem;
-  cursor:pointer;margin-top:8px;
-  transition:background 0.2s,box-shadow 0.3s;
-  font-family:'Orbitron',sans-serif;
-}
-.submit-btn:hover{background:#6ef0ff;box-shadow:0 0 10px #4cc9f0cc}
-.meta-block{
-  border-top:2px solid transparent;
-  border-bottom:2px solid transparent;
-  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
-  background:#000;
-  padding:8px 10px;
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-  font-size:0.7rem;
-  margin-top:14px;
-}
-.meta-line{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:0.65rem}
-.meta-label{font-weight:800;text-transform:uppercase;color:#eee;font-family:'Orbitron',sans-serif}
-.meta-value{font-size:0.45rem;font-family:'Orbitron',sans-serif;color:#aaa}
-.meta-bottom{
-  border-top:2px solid transparent;
-  border-image:linear-gradient(135deg,#ff6ec4,#7873f5,#4cc9f0,#3ef3a2,#ff6ec4) 1;
-  background:#111;
-  padding:8px 12px 32px;
+.bank-last-badge{
+  position:absolute;
+  top:20px;right:20px;
+  background:rgba(200,255,0,0.08);
+  border:1px solid rgba(200,255,0,0.2);
+  border-radius:2px;
+  padding:6px 12px;
   text-align:center;
-  color:#ccc;
-  font-size:0.5rem;
-  margin-top:10px;
-  position:relative;
-  font-family:'Orbitron',sans-serif;
 }
-.meta-timestamp{font-size:0.65rem;color:#aefcff;margin-top:4px;letter-spacing:0.03em;padding:2px 14px;font-weight:600;text-shadow:0 0 4px #4cc9f0cc}
-.rarity.ZEOE{
-  position:absolute;right:10px;bottom:6px;
-  font-weight:800;letter-spacing:.02em;
-  border:1px solid rgba(255,255,255,.3);
-  padding:2px 6px;border-radius:4px;
-  font-size:0.65rem;
-  background:conic-gradient(from 0deg,#ff0040,#ffd200,#00ffcc,#00a2ff,#ff4dff,#ff0040);
-  background-size:200% 200%;
-  animation:holoShift 6s linear infinite;
-  color:#fff;
-  font-family:'Orbitron',sans-serif;
+.bank-last-label{font-size:7px;letter-spacing:3px;color:#444;text-transform:uppercase;margin-bottom:2px;}
+.bank-last-val{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;color:#c8ff00;line-height:1;
 }
-@keyframes holoShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.bank-log-header{
+  padding:10px 20px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #111;
+}
+.bank-log-title{font-size:8px;letter-spacing:4px;color:#333;text-transform:uppercase;}
+.bank-log-count{font-size:8px;letter-spacing:2px;color:#c8ff00;}
+.bank-log-inner{
+  max-height:160px;
+  overflow-y:auto;
+}
+.bank-log-inner::-webkit-scrollbar{width:2px}
+.bank-log-inner::-webkit-scrollbar-track{background:#0a0a0a}
+.bank-log-inner::-webkit-scrollbar-thumb{background:#c8ff00}
+.bank-log-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 20px;
+  border-bottom:1px solid #0f0f0f;
+  transition:background .15s;
+}
+.bank-log-row:hover{background:rgba(200,255,0,0.03)}
+.bank-log-row.new-entry{animation:slideIn .3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.bank-log-time{font-size:8px;color:#333;letter-spacing:1px;min-width:70px;}
+.bank-log-action{font-size:9px;color:#555;letter-spacing:1px;flex:1;padding:0 8px;}
+.bank-log-pts{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#c8ff00;letter-spacing:1px;}
+.bank-empty{padding:20px;text-align:center;font-size:9px;letter-spacing:3px;color:#222;text-transform:uppercase;}
+.bank-footer{
+  padding:8px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#090909;
+}
+.bank-sync{display:flex;align-items:center;gap:5px;}
+.bank-sync-dot{width:5px;height:5px;border-radius:50%;background:#333;}
+.bank-sync-txt{font-size:7px;letter-spacing:2px;color:#333;text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -736,10 +721,8 @@ footer{
     <li><a href="#ref">Refer</a></li>
   </ul>
 
-  <!-- JOIN NOW (logged out) -->
   <a class="nav-cta" id="nav-cta" href="#" onclick="openModal('signup');return false">Join Now</a>
 
-  <!-- NAV BANK TRIGGER (logged in, replaces join now) -->
   <div id="nav-bank-trigger" style="display:none;position:relative;">
     <div onclick="toggleNavBank()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 14px;border:1px solid #2a2a2a;background:#0d0d0d;transition:border-color .2s;" id="nav-bank-btn">
       <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid #c8ff00;display:grid;place-items:center;">
@@ -749,11 +732,8 @@ footer{
       <span style="font-size:9px;letter-spacing:2px;color:#444;text-transform:uppercase;">PTS</span>
       <span id="nav-bank-chevron" style="font-size:9px;color:#444;margin-left:2px;">▼</span>
     </div>
-
-    <!-- DROPDOWN PANEL -->
     <div id="nav-bank-panel" style="display:none;position:absolute;top:calc(100% + 12px);right:0;width:320px;z-index:200;">
       <div class="bank-card">
-        <!-- Balance -->
         <div class="bank-balance" style="padding:16px 20px 14px;">
           <div class="bank-balance-label">Available Balance</div>
           <div class="bank-balance-amount" id="bank-total" style="font-size:52px;">0</div>
@@ -763,17 +743,13 @@ footer{
             <div class="bank-last-val" id="bank-last">—</div>
           </div>
         </div>
-
-        <!-- Log -->
         <div class="bank-log-header">
           <span class="bank-log-title">Transaction Log</span>
           <span class="bank-log-count" id="bank-log-count">0 entries</span>
         </div>
         <div class="bank-log-inner" id="bank-log" style="max-height:180px;"></div>
         <div class="bank-empty" id="bank-empty">No transactions yet</div>
-
-        <!-- Footer -->
-        <div class="bank-footer" style="justify-content:space-between;">
+        <div class="bank-footer">
           <div class="bank-sync">
             <div class="bank-sync-dot" id="bank-sync-dot"></div>
             <span class="bank-sync-txt" id="bank-sync-txt">NOT SYNCED</span>
@@ -821,186 +797,37 @@ footer{
 </div>
 
 <!-- POINTS BANK WIDGET -->
-<style>
-#points-bank-widget{
-  display:none;
-  position:fixed;
-  bottom:24px;right:24px;
-  z-index:500;
-  width:320px;
-  font-family:'Space Mono',monospace;
-  filter:drop-shadow(0 0 24px rgba(200,255,0,0.15));
-}
-.bank-card{
-  background:linear-gradient(160deg,#0e0e0e 0%,#141414 60%,#0a0a0a 100%);
-  border:1px solid #2a2a2a;
-  border-radius:2px;
-  overflow:hidden;
-  position:relative;
-}
-.bank-card::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,#c8ff00,transparent);
-}
-.bank-header{
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-  border-bottom:1px solid #1a1a1a;
-  user-select:none;
-}
-.bank-header:hover{ background:rgba(200,255,0,0.03); }
-.bank-logo{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.bank-chip{
-  width:20px;height:20px;
-  border-radius:50%;
-  border:2px solid #c8ff00;
-  display:grid;place-items:center;
-  position:relative;
-}
-.bank-chip::before{
-  content:'';
-  width:8px;height:8px;
-  border-radius:50%;
-  background:#c8ff00;
-  box-shadow:0 0 6px #c8ff00;
-}
-.bank-name{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:16px;
-  letter-spacing:4px;
-  color:#888;
-}
-.bank-header-right{
-  display:flex;align-items:center;gap:10px;
-}
-.bank-live{
-  display:flex;align-items:center;gap:4px;
-  font-size:8px;letter-spacing:2px;color:#444;text-transform:uppercase;
-}
-.bank-live-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:#c8ff00;
-  box-shadow:0 0 4px #c8ff00;
-  animation:blink 1.4s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
-.bank-toggle{
-  font-size:10px;color:#444;
-  transition:transform .25s;
-}
-/* Balance section */
-.bank-balance{
-  padding:20px 20px 16px;
-  position:relative;
-  border-bottom:1px solid #141414;
-}
-.bank-balance-label{
-  font-size:8px;letter-spacing:4px;color:#444;
-  text-transform:uppercase;margin-bottom:6px;
-}
-.bank-balance-amount{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:64px;
-  line-height:1;
-  color:#c8ff00;
-  text-shadow:0 0 30px rgba(200,255,0,0.4);
-  transition:all .2s;
-  letter-spacing:2px;
-}
-.bank-balance-amount.flash{
-  text-shadow:0 0 60px rgba(200,255,0,0.9);
-  color:#fff;
-}
-.bank-pts-label{
-  font-size:10px;letter-spacing:4px;color:#444;
-  text-transform:uppercase;margin-top:2px;
-}
-.bank-last-badge{
-  position:absolute;
-  top:20px;right:20px;
-  background:rgba(200,255,0,0.08);
-  border:1px solid rgba(200,255,0,0.2);
-  border-radius:2px;
-  padding:6px 12px;
-  text-align:center;
-}
-.bank-last-label{font-size:7px;letter-spacing:3px;color:#444;text-transform:uppercase;margin-bottom:2px;}
-.bank-last-val{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:24px;color:#c8ff00;line-height:1;
-}
-/* Log section */
-.bank-log-wrap{
-  overflow:hidden;
-  transition:max-height .3s ease;
-  max-height:300px;
-}
-.bank-log-header{
-  padding:10px 20px 8px;
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px solid #111;
-}
-.bank-log-title{font-size:8px;letter-spacing:4px;color:#333;text-transform:uppercase;}
-.bank-log-count{font-size:8px;letter-spacing:2px;color:#c8ff00;}
-.bank-log-inner{
-  max-height:160px;
-  overflow-y:auto;
-}
-.bank-log-inner::-webkit-scrollbar{width:2px}
-.bank-log-inner::-webkit-scrollbar-track{background:#0a0a0a}
-.bank-log-inner::-webkit-scrollbar-thumb{background:#c8ff00}
-.bank-log-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 20px;
-  border-bottom:1px solid #0f0f0f;
-  transition:background .15s;
-}
-.bank-log-row:hover{background:rgba(200,255,0,0.03)}
-.bank-log-row.new-entry{
-  animation:slideIn .3s ease;
-}
-@keyframes slideIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
-.bank-log-time{font-size:8px;color:#333;letter-spacing:1px;min-width:70px;}
-.bank-log-action{font-size:9px;color:#555;letter-spacing:1px;flex:1;padding:0 8px;}
-.bank-log-pts{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:18px;color:#c8ff00;
-  letter-spacing:1px;
-}
-.bank-empty{
-  padding:20px;
-  text-align:center;
-  font-size:9px;letter-spacing:3px;color:#222;
-  text-transform:uppercase;
-}
-/* Footer */
-.bank-footer{
-  padding:8px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:#090909;
-}
-.bank-sync{display:flex;align-items:center;gap:5px;}
-.bank-sync-dot{width:5px;height:5px;border-radius:50%;background:#333;}
-.bank-sync-txt{font-size:7px;letter-spacing:2px;color:#333;text-transform:uppercase;}
-.bank-footer-brand{font-size:7px;letter-spacing:3px;color:#1e1e1e;text-transform:uppercase;}
-</style>
+<div id="points-bank-widget">
+  <div class="bank-card">
+    <div class="bank-balance">
+      <div class="bank-balance-label">Available Balance</div>
+      <div class="bank-balance-amount" id="widget-bank-total">0</div>
+      <div class="bank-pts-label">SIGZ POINTS</div>
+      <div class="bank-last-badge">
+        <div class="bank-last-label">Last Earned</div>
+        <div class="bank-last-val" id="widget-bank-last">—</div>
+      </div>
+    </div>
+    <div class="bank-log-header">
+      <span class="bank-log-title">Transaction Log</span>
+      <span class="bank-log-count" id="widget-bank-log-count">0 entries</span>
+    </div>
+    <div class="bank-log-inner" id="widget-bank-log"></div>
+    <div class="bank-empty" id="widget-bank-empty">No transactions yet</div>
+    <div class="bank-footer">
+      <div class="bank-sync">
+        <div class="bank-sync-dot" id="widget-sync-dot"></div>
+        <span class="bank-sync-txt" id="widget-sync-txt">NOT SYNCED</span>
+      </div>
+      <div style="font-size:7px;letter-spacing:3px;color:#1e1e1e;text-transform:uppercase;">ZETSU BANK</div>
+    </div>
+  </div>
+</div>
 
 <!-- AUTH MODAL -->
 <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
   <div style="background:#111;border:1px solid #2e2e2e;padding:48px 40px;width:360px;position:relative">
-    <button onclick="closeModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;color:#fff">&#x2715;</button>
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:20px;cursor:pointer;color:#fff">&#x2715;</button>
     <p id="modal-mode-label" style="font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:32px;letter-spacing:2px">SIGN IN</p>
     <div style="display:flex;flex-direction:column;gap:12px">
       <input id="auth-email" type="email" placeholder="Email" style="background:#0a0a0a;border:1px solid #2e2e2e;padding:12px 16px;color:#f2f0eb;font-family:'Space Mono',monospace;font-size:12px;outline:none;width:100%;box-sizing:border-box">
@@ -1049,26 +876,10 @@ footer{
     <p class="section-label">Store</p>
     <h2 class="section-title">Shop <em>Preview</em></h2>
     <div class="shop-grid">
-      <div class="shop-item">
-        <div class="shop-item-icon">Z</div>
-        <div class="shop-item-name">Drop 001</div>
-        <div class="shop-item-tag">ZETSU ITEM</div>
-      </div>
-      <div class="shop-item">
-        <div class="shop-item-icon">Z</div>
-        <div class="shop-item-name">Drop 002</div>
-        <div class="shop-item-tag">ZETSU ITEM</div>
-      </div>
-      <div class="shop-item">
-        <div class="shop-item-icon">Z</div>
-        <div class="shop-item-name">Drop 003</div>
-        <div class="shop-item-tag">ZETSU ITEM</div>
-      </div>
-      <div class="shop-item">
-        <div class="shop-item-icon">Z</div>
-        <div class="shop-item-name">Drop 004</div>
-        <div class="shop-item-tag">COMING SOON</div>
-      </div>
+      <div class="shop-item"><div class="shop-item-icon">Z</div><div class="shop-item-name">Drop 001</div><div class="shop-item-tag">ZETSU ITEM</div></div>
+      <div class="shop-item"><div class="shop-item-icon">Z</div><div class="shop-item-name">Drop 002</div><div class="shop-item-tag">ZETSU ITEM</div></div>
+      <div class="shop-item"><div class="shop-item-icon">Z</div><div class="shop-item-name">Drop 003</div><div class="shop-item-tag">ZETSU ITEM</div></div>
+      <div class="shop-item"><div class="shop-item-icon">Z</div><div class="shop-item-name">Drop 004</div><div class="shop-item-tag">COMING SOON</div></div>
     </div>
   </div>
 </section>
@@ -1080,27 +891,15 @@ footer{
       <div class="what-text">
         <p class="section-label">Origin</p>
         <h2 class="section-title">What Is <em>Zetsu</em></h2>
-        <p>Zetsu is the economic layer of The Zetsumetsu Corporation — a self-sustaining loop built on attention, action, and reward. Every click inside the reality generates value. Every referral compounds it.</p>
+        <p>Zetsu is the economic layer of The Zetsumetsu Corporation, a self-sustaining loop built on attention, action, and reward. Every click inside the reality generates value. Every referral compounds it.</p>
         <p>This is not a platform. It is a system. You sign in, you move through the loop, you accumulate. The structure does the rest.</p>
         <a class="btn-ghost" href="#" style="margin-top:8px">Learn More</a>
       </div>
       <div class="what-stat-grid">
-        <div class="what-stat">
-          <div class="what-stat-num">$AWT</div>
-          <div class="what-stat-label">Token Ecosystem</div>
-        </div>
-        <div class="what-stat">
-          <div class="what-stat-num">∞</div>
-          <div class="what-stat-label">Referral Loop</div>
-        </div>
-        <div class="what-stat">
-          <div class="what-stat-num">01</div>
-          <div class="what-stat-label">Reality</div>
-        </div>
-        <div class="what-stat">
-          <div class="what-stat-num">SIGZ</div>
-          <div class="what-stat-label">Social Layer</div>
-        </div>
+        <div class="what-stat"><div class="what-stat-num">$AWT</div><div class="what-stat-label">Token Ecosystem</div></div>
+        <div class="what-stat"><div class="what-stat-num">∞</div><div class="what-stat-label">Referral Loop</div></div>
+        <div class="what-stat"><div class="what-stat-num">01</div><div class="what-stat-label">Reality</div></div>
+        <div class="what-stat"><div class="what-stat-num">SIGZ</div><div class="what-stat-label">Social Layer</div></div>
       </div>
     </div>
   </div>
@@ -1116,7 +915,7 @@ footer{
         <div class="do-card-num">01</div>
         <div class="do-card-tag">Earn</div>
         <div class="do-card-title">Click to Earn</div>
-        <p class="do-card-body">Every interaction inside Zetsu generates points. Ads, posts, referrals — all of it feeds the loop. Your attention has a value here.</p>
+        <p class="do-card-body">Every interaction inside Zetsu generates points. Ads, posts, referrals, all of it feeds the loop. Your attention has a value here.</p>
         <a class="do-card-link" href="#">Explore →</a>
       </div>
       <div class="do-card">
@@ -1130,7 +929,7 @@ footer{
         <div class="do-card-num">03</div>
         <div class="do-card-tag">Expand</div>
         <div class="do-card-title">Refer & Grow</div>
-        <p class="do-card-body">Your referral link compounds every time someone enters the loop through you. The system builds the network — you collect the rewards.</p>
+        <p class="do-card-body">Your referral link compounds every time someone enters the loop through you. The system builds the network, you collect the rewards.</p>
         <a class="do-card-link" href="#ref">Get Link →</a>
       </div>
     </div>
@@ -1156,31 +955,11 @@ footer{
     <p class="section-label">Content Hub</p>
     <h2 class="section-title">Latest <em>Posts</em></h2>
     <div class="news-grid">
-      <div class="news-card">
-        <div class="news-card-tag">System</div>
-        <div class="news-card-title">HOW THE LOOP WORKS</div>
-        <div class="news-card-date">APR 2025</div>
-      </div>
-      <div class="news-card">
-        <div class="news-card-tag">Token</div>
-        <div class="news-card-title">$AWT TOKEN DROP</div>
-        <div class="news-card-date">MAR 2025</div>
-      </div>
-      <div class="news-card">
-        <div class="news-card-tag">SIGZ</div>
-        <div class="news-card-title">SIGZ V2 IS LIVE</div>
-        <div class="news-card-date">FEB 2025</div>
-      </div>
-      <div class="news-card">
-        <div class="news-card-tag">Detroit</div>
-        <div class="news-card-title">ZETSU CORP ORIGINS</div>
-        <div class="news-card-date">JAN 2025</div>
-      </div>
-      <div class="news-card">
-        <div class="news-card-tag">Drop</div>
-        <div class="news-card-title">FIRST STORE DROP</div>
-        <div class="news-card-date">DEC 2024</div>
-      </div>
+      <div class="news-card"><div class="news-card-tag">System</div><div class="news-card-title">HOW THE LOOP WORKS</div><div class="news-card-date">APR 2025</div></div>
+      <div class="news-card"><div class="news-card-tag">Token</div><div class="news-card-title">$AWT TOKEN DROP</div><div class="news-card-date">MAR 2025</div></div>
+      <div class="news-card"><div class="news-card-tag">SIGZ</div><div class="news-card-title">SIGZ V2 IS LIVE</div><div class="news-card-date">FEB 2025</div></div>
+      <div class="news-card"><div class="news-card-tag">Detroit</div><div class="news-card-title">ZETSU CORP ORIGINS</div><div class="news-card-date">JAN 2025</div></div>
+      <div class="news-card"><div class="news-card-tag">Drop</div><div class="news-card-title">FIRST STORE DROP</div><div class="news-card-date">DEC 2024</div></div>
     </div>
   </div>
 </section>
@@ -1213,9 +992,7 @@ footer{
         </div>
         <a class="btn-primary" href="#">WATCH ZETSU</a>
       </div>
-      <div class="ad-display">
-        <span>ZETSU AD SPACE</span>
-      </div>
+      <div class="ad-display"><span>ZETSU AD SPACE</span></div>
     </div>
   </div>
 </section>
@@ -1243,20 +1020,10 @@ footer{
 </footer>
 
 <script>
-function copyRef(){
-  const txt=document.getElementById('ref-link-text').textContent;
-  navigator.clipboard.writeText(txt).then(()=>{
-    const btn=document.querySelector('.ref-copy-btn');
-    btn.textContent='COPIED';
-    setTimeout(()=>{btn.textContent='COPY'},2000);
-  });
-}
-</script>
-
-<script>
 const SB_URL = 'https://jqvnrdjrkdjgjbmqmbbl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impxdm5yZGpya2RqZ2pibXFtYmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTIwOTcsImV4cCI6MjA2NjgyODA5N30.5hMfCI3jir8PK2Aa1Z6w152EGYGSQFlPysk4CaxpmI8';
 let authMode = 'login';
+let navBankOpen = false;
 
 async function sha256(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -1290,7 +1057,6 @@ async function submitAuth(){
 
   try {
     if(authMode==='signup'){
-      // check if exists
       const check = await fetch(`${SB_URL}/rest/v1/zetsu_edu?email=eq.${encodeURIComponent(email)}`,{
         headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
       });
@@ -1300,7 +1066,7 @@ async function submitAuth(){
       const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu`,{
         method:'POST',
         headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
-        body:JSON.stringify([{email,encode:encoded,display_name:email.split('@')[0],created_at:new Date().toISOString(),points:0,points_log:'[]'}])
+        body:JSON.stringify([{email,encode:encoded,display_name:email.split('@')[0],created_at:new Date().toISOString(),points:0,points_log:[]}])
       });
       const data = await res.json();
       if(!res.ok) throw new Error(data.message||'Signup failed');
@@ -1334,99 +1100,13 @@ async function showAd(user){
   document.getElementById('ad-overlay').style.display='flex';
 }
 
-let navBankOpen = false;
-
-function toggleNavBank(){
-  navBankOpen = !navBankOpen;
-  const panel = document.getElementById('nav-bank-panel');
-  const chevron = document.getElementById('nav-bank-chevron');
-  const btn = document.getElementById('nav-bank-btn');
-  panel.style.display = navBankOpen ? 'block' : 'none';
-  chevron.textContent = navBankOpen ? '▲' : '▼';
-  btn.style.borderColor = navBankOpen ? '#c8ff00' : '#2a2a2a';
-}
-
-// close panel when clicking outside
-document.addEventListener('click', function(e){
-  const trigger = document.getElementById('nav-bank-trigger');
-  if(trigger && !trigger.contains(e.target)){
-    navBankOpen = false;
-    const panel = document.getElementById('nav-bank-panel');
-    const chevron = document.getElementById('nav-bank-chevron');
-    const btn = document.getElementById('nav-bank-btn');
-    if(panel) panel.style.display='none';
-    if(chevron) chevron.textContent='▼';
-    if(btn) btn.style.borderColor='#2a2a2a';
-  }
-});
-
-function setSyncStatus(state){
-  const dot = document.getElementById('bank-sync-dot');
-  const txt = document.getElementById('bank-sync-txt');
-  if(state==='synced'){ dot.style.background='#c8ff00'; dot.style.boxShadow='0 0 4px #c8ff00'; txt.style.color='#555'; txt.textContent='SYNCED'; }
-  else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
-  else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
-}
-
-function animateBalance(newVal){
-  const el = document.getElementById('bank-total');
-  el.classList.add('flash');
-  el.textContent = newVal;
-  setTimeout(()=>el.classList.remove('flash'), 400);
-  // also update nav trigger
-  const navPts = document.getElementById('nav-bank-pts');
-  if(navPts) navPts.textContent = newVal;
-}
-
-function renderBankWidget(total, log, lastEarned){
-  animateBalance(total);
-  document.getElementById('bank-last').textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
-  document.getElementById('hero-points-val').textContent = total;
-
-  const logEl = document.getElementById('bank-log');
-  const emptyEl = document.getElementById('bank-empty');
-  const countEl = document.getElementById('bank-log-count');
-
-  if(!log || log.length===0){
-    logEl.innerHTML='';
-    emptyEl.style.display='block';
-    countEl.textContent='0 entries';
-  } else {
-    emptyEl.style.display='none';
-    countEl.textContent = log.length + (log.length===1?' entry':' entries');
-    logEl.innerHTML = log.map((e,i)=>`
-      <div class="bank-log-row${i===0?' new-entry':''}">
-        <span class="bank-log-time">${e.time}</span>
-        <span class="bank-log-action">${e.action}</span>
-        <span class="bank-log-pts">+${e.pts}</span>
-      </div>`).join('');
-  }
-}
-
-async function syncPointsToSupabase(user, total, log){
-  setSyncStatus('syncing');
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
-      method:'PATCH',
-      headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
-      body:JSON.stringify({points: total, points_log: JSON.stringify(log)})
-    });
-    if(!res.ok) throw new Error('patch failed');
-    setSyncStatus('synced');
-  } catch(e){
-    setSyncStatus('error');
-  }
-}
-
 async function claimPoints(){
   document.getElementById('ad-overlay').style.display='none';
   const user = JSON.parse(sessionStorage.getItem('pending_user'));
   sessionStorage.removeItem('pending_user');
   const pts = 10;
 
-  // build log entry
-  const adUrl = document.getElementById('claim-link').href;
-  const entry = {pts, time: new Date().toLocaleTimeString(), action:'Ad Watch', ad_url: adUrl, ts: Date.now()};
+  const entry = {pts, time: new Date().toLocaleTimeString(), action:'Ad Watch', ts: Date.now()};
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
   log.unshift(entry);
   sessionStorage.setItem('points_log', JSON.stringify(log));
@@ -1437,7 +1117,6 @@ async function claimPoints(){
   document.getElementById('points-bank-widget').style.display='block';
   renderBankWidget(total, log, pts);
 
-  // sync to supabase
   await syncPointsToSupabase(user, total, log);
 }
 
@@ -1452,6 +1131,21 @@ function skipAd(){
   renderBankWidget(total, log, undefined);
 }
 
+async function syncPointsToSupabase(user, total, log){
+  setSyncStatus('syncing');
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
+      method:'PATCH',
+      headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
+      body:JSON.stringify({points: total, points_log: log})
+    });
+    if(!res.ok) throw new Error('patch failed');
+    setSyncStatus('synced');
+  } catch(e){
+    setSyncStatus('error');
+  }
+}
+
 async function loadPointsFromSupabase(user){
   try {
     const res = await fetch(`${SB_URL}/rest/v1/zetsu_edu?id=eq.${user.id}`,{
@@ -1460,7 +1154,8 @@ async function loadPointsFromSupabase(user){
     const data = await res.json();
     if(data && data[0]){
       const total = data[0].points || 0;
-      const log = data[0].points_log ? JSON.parse(data[0].points_log) : [];
+      const raw = data[0].points_log;
+      const log = Array.isArray(raw) ? raw : (raw ? JSON.parse(raw) : []);
       sessionStorage.setItem('total_points', total);
       sessionStorage.setItem('points_log', JSON.stringify(log));
       return {total, log};
@@ -1469,18 +1164,74 @@ async function loadPointsFromSupabase(user){
   return {total:0, log:[]};
 }
 
+function setSyncStatus(state){
+  const ids = [['bank-sync-dot','bank-sync-txt'],['widget-sync-dot','widget-sync-txt']];
+  ids.forEach(([dotId, txtId])=>{
+    const dot = document.getElementById(dotId);
+    const txt = document.getElementById(txtId);
+    if(!dot||!txt) return;
+    if(state==='synced'){ dot.style.background='#c8ff00'; dot.style.boxShadow='0 0 4px #c8ff00'; txt.style.color='#555'; txt.textContent='SYNCED'; }
+    else if(state==='syncing'){ dot.style.background='#ffaa00'; dot.style.boxShadow='0 0 4px #ffaa00'; txt.style.color='#555'; txt.textContent='SYNCING...'; }
+    else { dot.style.background='#ff3232'; dot.style.boxShadow='none'; txt.style.color='#444'; txt.textContent='SYNC FAILED'; }
+  });
+}
+
+function animateBalance(newVal){
+  ['bank-total','widget-bank-total'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.add('flash');
+    el.textContent = newVal;
+    setTimeout(()=>el.classList.remove('flash'), 400);
+  });
+  const navPts = document.getElementById('nav-bank-pts');
+  if(navPts) navPts.textContent = newVal;
+}
+
+function renderBankWidget(total, log, lastEarned){
+  animateBalance(total);
+
+  ['bank-last','widget-bank-last'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = lastEarned !== undefined ? '+'+lastEarned : '—';
+  });
+
+  document.getElementById('hero-points-val').textContent = total;
+
+  const renderLog = (logElId, emptyElId, countElId) => {
+    const logEl = document.getElementById(logElId);
+    const emptyEl = document.getElementById(emptyElId);
+    const countEl = document.getElementById(countElId);
+    if(!logEl||!emptyEl||!countEl) return;
+    if(!log || log.length===0){
+      logEl.innerHTML='';
+      emptyEl.style.display='block';
+      countEl.textContent='0 entries';
+    } else {
+      emptyEl.style.display='none';
+      countEl.textContent = log.length + (log.length===1?' entry':' entries');
+      logEl.innerHTML = log.map((e,i)=>`
+        <div class="bank-log-row${i===0?' new-entry':''}">
+          <span class="bank-log-time">${e.time}</span>
+          <span class="bank-log-action">${e.action}</span>
+          <span class="bank-log-pts">+${e.pts}</span>
+        </div>`).join('');
+    }
+  };
+
+  renderLog('bank-log','bank-empty','bank-log-count');
+  renderLog('widget-bank-log','widget-bank-empty','widget-bank-log-count');
+}
+
 function showLoggedIn(user){
   const currentTotal = parseInt(sessionStorage.getItem('total_points')||'0');
-  // swap join now → bank trigger
   document.getElementById('nav-cta').style.display='none';
   document.getElementById('nav-bank-trigger').style.display='block';
   document.getElementById('nav-bank-pts').textContent = currentTotal;
-  // hero
   document.getElementById('hero-btns').style.display='none';
   document.getElementById('hero-points').style.display='flex';
   document.getElementById('hero-user-val').textContent=(user?.display_name||user?.email||'USER').toUpperCase();
   document.getElementById('hero-points-val').textContent=currentTotal;
-  // render bank
   const log = JSON.parse(sessionStorage.getItem('points_log')||'[]');
   renderBankWidget(currentTotal, log, undefined);
   setSyncStatus('synced');
@@ -1498,7 +1249,31 @@ function signOut(){
   document.getElementById('ad-overlay').style.display='none';
   document.getElementById('hero-points').style.display='none';
   document.getElementById('hero-btns').style.display='flex';
+  document.getElementById('points-bank-widget').style.display='none';
 }
+
+function toggleNavBank(){
+  navBankOpen = !navBankOpen;
+  const panel = document.getElementById('nav-bank-panel');
+  const chevron = document.getElementById('nav-bank-chevron');
+  const btn = document.getElementById('nav-bank-btn');
+  panel.style.display = navBankOpen ? 'block' : 'none';
+  chevron.textContent = navBankOpen ? '▲' : '▼';
+  btn.style.borderColor = navBankOpen ? '#c8ff00' : '#2a2a2a';
+}
+
+document.addEventListener('click', function(e){
+  const trigger = document.getElementById('nav-bank-trigger');
+  if(trigger && !trigger.contains(e.target)){
+    navBankOpen = false;
+    const panel = document.getElementById('nav-bank-panel');
+    const chevron = document.getElementById('nav-bank-chevron');
+    const btn = document.getElementById('nav-bank-btn');
+    if(panel) panel.style.display='none';
+    if(chevron) chevron.textContent='▼';
+    if(btn) btn.style.borderColor='#2a2a2a';
+  }
+});
 
 function copyRef(){
   const txt=document.getElementById('ref-link-text').textContent;
@@ -1517,7 +1292,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     sessionStorage.setItem('total_points', total);
     sessionStorage.setItem('points_log', JSON.stringify(log));
     showLoggedIn(user);
+    document.getElementById('points-bank-widget').style.display='block';
   }
 });
 </script>
 </body>
+</html>
