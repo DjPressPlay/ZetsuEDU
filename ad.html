@@ -9,15 +9,37 @@
   body { background: #0a0a0a; width: 100%; overflow: hidden; }
   .ad-wrapper { width: 100%; overflow: hidden; }
   .ad-wrapper a img { width: 100%; display: block; }
+  .slide { display: none; }
+  .slide.active { display: block; }
 </style>
 </head>
 <body>
 <div class="ad-wrapper">
-  <a href="https://11220.play.gamezop.com/" target="_blank" rel="noopener">
-    <img src="https://static.gamezop.com/creatives/a6021b6e-d93f-44c5-a90b-7d919531dffc.png" alt="Gamezop">
-  </a>
+  <div class="slide active">
+    <a href="https://11220.play.gamezop.com/" target="_blank" rel="noopener">
+      <img src="https://static.gamezop.com/creatives/a6021b6e-d93f-44c5-a90b-7d919531dffc.png" alt="Gamezop">
+    </a>
+  </div>
+  <div class="slide">
+    <a href="https://11220.play.gamezop.com/" target="_blank" rel="noopener">
+      <img src="https://static.gamezop.com/creatives/3bf72bcb-841d-4d34-b8d6-f4244d0bee51.png" alt="Gamezop">
+    </a>
+  </div>
+  <div class="slide">
+    <a href="https://11220.play.gamezop.com/" target="_blank" rel="noopener">
+      <img src="https://static.gamezop.com/creatives/800f984a-9d21-44e8-82de-bea8882fce47.png" alt="Gamezop">
+    </a>
+  </div>
 </div>
 <script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
