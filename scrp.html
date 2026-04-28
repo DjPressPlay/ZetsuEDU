@@ -36,16 +36,21 @@
   .post-card { background: var(--card); border: 1px solid var(--border); padding: 24px 28px; text-decoration: none; display: block; }
   .post-card:hover { background: #1a1a1a; border-color: #333; }
   .post-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--white); flex-shrink: 0; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--white); flex-shrink: 0; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .post-author { font-size: 13px; font-weight: 600; color: var(--white); }
   .post-date-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
   .post-tag { color: var(--gold); }
   .post-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.35; }
   .post-preview { font-size: 13px; font-weight: 300; color: #777; line-height: 1.7; margin-bottom: 16px; }
+  .post-footer { display: flex; align-items: center; justify-content: space-between; }
   .post-read { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
   .post-read::after { content: ' →'; }
+  .post-stats { font-family: 'Space Mono', monospace; font-size: 10px; color: #444; letter-spacing: 1px; }
   .empty-state { text-align: center; padding: 60px 0; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
   .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .instructions { background: #0e0e0e; border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 16px 20px; margin-bottom: 28px; font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.8; color: #666; }
+  .instructions strong { color: var(--gold); }
   @media (max-width: 640px) { body { padding: 20px; } }
 </style>
 </head>
@@ -54,12 +59,20 @@
 <h1>Skool <span>Scraper</span></h1>
 <div class="sub">ZetsuEDU — Post Feed Builder</div>
 
+<div class="instructions">
+  <strong>HOW TO USE:</strong><br/>
+  1. Open your Skool community feed in another tab<br/>
+  2. Paste the tab URL below<br/>
+  3. Hit Scrape — reads the live DOM using Backpack selectors<br/>
+  4. Copy or download the JSON, then load it into ZetsuEDU
+</div>
+
 <div class="input-row">
-  <input type="text" id="skool-url" placeholder="Paste your Skool community URL (e.g. https://www.skool.com/yourgroup/feed)" />
+  <input type="text" id="skool-url" placeholder="https://www.skool.com/yourgroup/feed" />
   <button onclick="scrape()">Scrape Posts</button>
 </div>
 
-<div class="status" id="status">Waiting for URL...</div>
+<div class="status" id="status">Waiting...</div>
 
 <hr/>
 
@@ -80,87 +93,83 @@
 <script>
   let scrapedPosts = [];
 
+  // Exact selectors from Backpack v68 content.js getRecentPostData()
+  const SEL = {
+    wrapper:  '.styled__PostItemCardWrapper-sc-6yboky-0',
+    avatar:   '.styled__AvatarWrapper-sc-1ruw40r-0 img',
+    author:   '.styled__UserNameText-sc-24o0l3-1.gnbcTj',
+    badge:    '.styled__BadgeWrapper-sc-1o1lx2q-2.iVfNoI',
+    time:     '.styled__PostTimeContent-sc-vh0utx-8.diHWQw',
+    title:    '.styled__Title-sc-vh0utx-12.griAFY',
+    body:     '.styled__ContentPreviewWrapper-sc-vh0utx-13.erGJuk',
+    media:    'img.styled__PreviewImage-sc-vh0utx-17',
+    likes:    '.styled__LikesCount-sc-e4ns84-3.hCeSxM',
+    comments: '.styled__CommentsCount-sc-e4ns84-4.fZDvok',
+    link:     'a[href*="?p="]'
+  };
+
   async function scrape() {
     const url = document.getElementById('skool-url').value.trim();
-    const status = document.getElementById('status');
-
-    if (!url) {
-      setStatus('Paste a Skool URL first.', 'err');
-      return;
-    }
-
+    if (!url) { setStatus('Paste a Skool URL first.', 'err'); return; }
     setStatus('Fetching page...');
 
     try {
-      // Use a CORS proxy to fetch the Skool page
       const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
       const res = await fetch(proxy);
       const data = await res.json();
 
-      if (!data.contents) {
-        setStatus('No content returned. The page may require login.', 'err');
-        return;
-      }
+      if (!data.contents) { setStatus('No content returned.', 'err'); return; }
 
-      const html = data.contents;
-      const posts = parseSkoolPosts(html, url);
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data.contents, 'text/html');
+      const posts = extractPosts(doc, url);
 
-      if (posts.length === 0) {
-        setStatus('Page loaded but no posts detected. Try a direct post feed URL.', 'err');
+      if (!posts.length) {
+        setStatus('No posts detected. Confirm the URL loads your feed.', 'err');
         return;
       }
 
       scrapedPosts = posts;
       renderJSON(posts);
       renderPosts(posts);
-      setStatus(`Found ${posts.length} post(s).`, 'ok');
+      setStatus('Scraped ' + posts.length + ' post(s).', 'ok');
 
     } catch (err) {
       setStatus('Error: ' + err.message, 'err');
     }
   }
 
-  function parseSkoolPosts(html, baseUrl) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+  function extractPosts(doc, baseUrl) {
+    const wrappers = doc.querySelectorAll(SEL.wrapper);
     const posts = [];
 
-    // Target Skool post containers — class names confirmed from live DOM
-    const cards = doc.querySelectorAll(
-      '[class*="postCard"], [class*="post-card"], [class*="PostCard"], ' +
-      '[class*="feedPost"], [class*="feed-post"], [class*="FeedPost"], ' +
-      '[data-testid*="post"], article'
-    );
+    wrappers.forEach(el => {
+      const avatarSrc = el.querySelector(SEL.avatar)?.src || '';
+      const author    = el.querySelector(SEL.author)?.textContent?.trim() || 'Unknown';
+      const badge     = el.querySelector(SEL.badge)?.textContent?.trim() || '';
+      const timeText  = el.querySelector(SEL.time)?.textContent?.trim().split(' ')[0] || '';
+      const title     = el.querySelector(SEL.title)?.textContent?.trim() || '';
+      const body      = el.querySelector(SEL.body)?.textContent?.trim() || '';
+      const media     = el.querySelector(SEL.media)?.src || null;
+      const likes     = parseInt(el.querySelector(SEL.likes)?.textContent || '0') || 0;
+      const comments  = parseInt(el.querySelector(SEL.comments)?.textContent || '0') || 0;
+      const href      = el.querySelector(SEL.link)?.getAttribute('href') || '';
+      const link      = href.startsWith('http') ? href : 'https://www.skool.com' + href;
 
-    cards.forEach((card, i) => {
-      const titleEl = card.querySelector('h1, h2, h3, [class*="title"], [class*="Title"]');
-      const authorEl = card.querySelector('[class*="author"], [class*="Author"], [class*="name"], [class*="Name"]');
-      const bodyEl = card.querySelector('p, [class*="body"], [class*="content"], [class*="preview"]');
-      const linkEl = card.querySelector('a[href]');
-      const dateEl = card.querySelector('time, [class*="date"], [class*="Date"], [class*="time"]');
-
-      const title = titleEl ? titleEl.innerText.trim() : `Post ${i + 1}`;
-      const author = authorEl ? authorEl.innerText.trim() : 'Unknown';
-      const preview = bodyEl ? bodyEl.innerText.trim().slice(0, 160) : '';
-      const href = linkEl ? linkEl.getAttribute('href') : '';
-      const link = href.startsWith('http') ? href : baseUrl.replace(/\/$/, '') + href;
-      const date = dateEl ? dateEl.getAttribute('datetime') || dateEl.innerText.trim() : '';
-
-      posts.push({ title, author, preview, link, date });
+      posts.push({ avatar: avatarSrc, author, badge, time: timeText, title, body, media, likes, comments, link });
     });
 
-    // Fallback: grab any anchor with post-like hrefs
-    if (posts.length === 0) {
-      const anchors = doc.querySelectorAll('a[href*="/p/"], a[href*="/post/"]');
-      anchors.forEach((a, i) => {
-        const href = a.getAttribute('href');
-        const link = href.startsWith('http') ? href : 'https://www.skool.com' + href;
-        const title = a.innerText.trim() || `Post ${i + 1}`;
-        posts.push({ title, author: '', preview: '', link, date: '' });
-      });
-    }
-
+    posts.sort((a, b) => parseMinutes(a.time) - parseMinutes(b.time));
     return posts;
+  }
+
+  function parseMinutes(t) {
+    if (!t) return 9999;
+    const unit = t.slice(-1);
+    const val  = parseInt(t);
+    if (unit === 'h') return val * 60;
+    if (unit === 'd') return val * 1440;
+    return val;
   }
 
   function renderJSON(posts) {
@@ -169,22 +178,24 @@
 
   function renderPosts(posts) {
     const feed = document.getElementById('posts-feed');
-    if (!posts.length) {
-      feed.innerHTML = '<div class="empty-state">No posts found</div>';
-      return;
-    }
+    if (!posts.length) { feed.innerHTML = '<div class="empty-state">No posts found</div>'; return; }
     feed.innerHTML = posts.map(p => `
       <a class="post-card" href="${p.link}" target="_blank">
         <div class="post-card-top">
-          <div class="avatar">${(p.author[0] || 'Z').toUpperCase()}</div>
+          <div class="avatar">
+            ${p.avatar ? `<img src="${p.avatar}" alt="${p.author}" />` : (p.author[0] || 'Z').toUpperCase()}
+          </div>
           <div>
-            <div class="post-author">${p.author || 'Zetsumetsu'}</div>
-            <div class="post-date-tag">${p.date ? p.date + ' &nbsp;·&nbsp; ' : ''}<span class="post-tag">ZetsuEDU</span></div>
+            <div class="post-author">${p.author}${p.badge ? ' · ' + p.badge : ''}</div>
+            <div class="post-date-tag">${p.time || ''} &nbsp;·&nbsp; <span class="post-tag">ZetsuEDU</span></div>
           </div>
         </div>
-        <div class="post-title">${p.title}</div>
-        ${p.preview ? `<div class="post-preview">${p.preview}...</div>` : ''}
-        <div class="post-read">Read Post</div>
+        ${p.title ? `<div class="post-title">${p.title}</div>` : ''}
+        ${p.body  ? `<div class="post-preview">${p.body.slice(0, 160)}...</div>` : ''}
+        <div class="post-footer">
+          <div class="post-read">Read Post</div>
+          <div class="post-stats">♥ ${p.likes} &nbsp; 💬 ${p.comments}</div>
+        </div>
       </a>
     `).join('');
   }
@@ -196,13 +207,12 @@
   }
 
   function copyJSON() {
-    const text = document.getElementById('json-output').textContent;
-    navigator.clipboard.writeText(text).then(() => setStatus('JSON copied.', 'ok'));
+    navigator.clipboard.writeText(document.getElementById('json-output').textContent)
+      .then(() => setStatus('JSON copied.', 'ok'));
   }
 
   function downloadJSON() {
-    const text = document.getElementById('json-output').textContent;
-    const blob = new Blob([text], { type: 'application/json' });
+    const blob = new Blob([document.getElementById('json-output').textContent], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'skool-posts.json';
