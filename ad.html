@@ -26,6 +26,12 @@
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const height = document.body.scrollHeight;
+      window.parent.postMessage({ zetsuAdHeight: height }, '*');
+    }, 2000);
+  });
 </script>
 
 </body>
