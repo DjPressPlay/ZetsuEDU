@@ -20,6 +20,7 @@
 
   .ad-bar { width: 100%; border-bottom: 1px solid var(--border); background: #0a0a0a; overflow: hidden; height: 200px; flex-shrink: 0; }
   .ad-bar iframe { width: 100%; height: 100%; border: none; display: block; }
+
   nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
   .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; }
   .logo span { color: var(--red); }
@@ -72,36 +73,51 @@
   .carousel-track.animated { animation: scrollPosts var(--scroll-duration, 30s) linear infinite; }
   .carousel-track:hover { animation-play-state: paused; }
 
-  /* POST CARD */
-  .post-card {
-    flex: 0 0 240px;
+  /* NEWSLETTER CARD */
+  .nl-card {
+    flex: 0 0 220px;
     background: var(--card);
     border: 1px solid var(--border);
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     text-decoration: none;
     color: var(--white);
     transition: border-color 0.2s, transform 0.2s;
+    overflow: hidden;
   }
-  .post-card:hover { border-color: var(--red); transform: translateY(-2px); }
-  .post-card-top { display: flex; align-items: center; gap: 10px; }
-  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--white); flex-shrink: 0; overflow: hidden; }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .post-author { font-size: 12px; font-weight: 600; color: var(--white); }
-  .post-time { font-family: 'Space Mono', monospace; font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
-  .post-title { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.35; }
-  .post-preview { font-size: 12px; font-weight: 300; color: #666; line-height: 1.65; flex: 1; }
-  .post-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-  .post-read { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
-  .post-read::after { content: ' →'; }
-  .post-stats { display: flex; gap: 6px; }
-  .stat { font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 6px; border: 1px solid var(--border); color: #555; }
-  .stat.likes { color: #ff4f81; border-color: #ff4f8133; }
-  .stat.comments { color: var(--gold); border-color: #d4a84333; }
+  .nl-card:hover { border-color: var(--red); transform: translateY(-2px); }
+
+  .nl-card-img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    display: block;
+    background: #1a1a1a;
+  }
+  .nl-card-img-placeholder {
+    width: 100%;
+    height: 130px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1010 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--red-dim);
+  }
+
+  .nl-card-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .nl-card-date { font-family: 'Space Mono', monospace; font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+  .nl-card-title { font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--white); }
+  .nl-card-read { margin-top: auto; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .nl-card-read::after { content: ' →'; }
 
   .empty-state { padding: 0 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
+
+  /* NEWSLETTER SECTION */
+  .newsletter-section { border-top: 1px solid var(--border); padding: 48px; }
+  .newsletter-section .section-header { padding: 0; margin-bottom: 28px; }
 
   footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: #2a2a2a; }
@@ -117,6 +133,7 @@
     .hero { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 36px 20px; }
     nav, footer { padding-left: 20px; padding-right: 20px; }
     .section-header, .carousel-track, .empty-state { padding-left: 20px; padding-right: 20px; }
+    .newsletter-section { padding: 36px 20px; }
   }
 </style>
 </head>
@@ -157,12 +174,26 @@
 
 </div>
 
+<!-- NEWSLETTER SECTION -->
+<div class="newsletter-section">
+  <div class="section-header">
+    <div class="section-title">Newsletter</div>
+    <div class="section-count" id="nl-count">LOADING...</div>
+  </div>
+  <div class="carousel-container">
+    <div class="carousel-track" id="nl-feed">
+      <div class="empty-state">Loading issues...</div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-brand">Zetsumetsu Corp.</div>
   <div class="footer-note">Detroit, MI &nbsp;&middot;&nbsp; Built from scratch</div>
 </footer>
 
 <script>
+  // ── Skool posts (existing) ──────────────────────────────────────────────
   window.addEventListener('message', (e) => {
     if (!e.data || e.data.type !== 'ZETSU_CARD2_POSTS') return;
     renderPosts(e.data.posts || []);
@@ -214,6 +245,73 @@
       feed.classList.add('animated');
     }
   }
+
+  // ── Substack newsletter feed ────────────────────────────────────────────
+  const SUBSTACK_RSS = 'https://zetsumetsueoe.substack.com/feed';
+  const RSS2JSON = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(SUBSTACK_RSS)}&count=20`;
+
+  async function loadNewsletter() {
+    const feed = document.getElementById('nl-feed');
+    const count = document.getElementById('nl-count');
+
+    try {
+      const res = await fetch(RSS2JSON);
+      const data = await res.json();
+
+      if (!data.items || !data.items.length) {
+        feed.innerHTML = '<div class="empty-state">No issues yet</div>';
+        count.textContent = '0 ISSUES';
+        return;
+      }
+
+      count.textContent = data.items.length + ' ISSUE' + (data.items.length === 1 ? '' : 'S');
+
+      const cards = data.items.map(item => {
+        // Pull thumbnail from enclosure, media, or first img in content
+        let img = item.thumbnail || item.enclosure?.link || '';
+        if (!img) {
+          const match = item.content?.match(/<img[^>]+src="([^"]+)"/);
+          if (match) img = match[1];
+        }
+
+        const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        const title = item.title || 'Untitled';
+        const link = item.link || 'https://substack.com/@zetsumetsueoe';
+
+        return `
+          <a class="nl-card" href="${link}" target="_blank" rel="noopener">
+            ${img
+              ? `<img class="nl-card-img" src="${img}" alt="${title}" loading="lazy" />`
+              : `<div class="nl-card-img-placeholder">ZETSU</div>`
+            }
+            <div class="nl-card-body">
+              <div class="nl-card-date">${date}</div>
+              <div class="nl-card-title">${title}</div>
+              <div class="nl-card-read">Read Issue</div>
+            </div>
+          </a>
+        `;
+      }).join('');
+
+      const shouldLoop = data.items.length >= 3;
+      feed.innerHTML = shouldLoop ? cards + cards : cards;
+
+      if (shouldLoop) {
+        const cardWidth = 220 + 12;
+        const totalWidth = data.items.length * cardWidth;
+        feed.style.setProperty('--scroll-distance', `-${totalWidth}px`);
+        feed.style.setProperty('--scroll-duration', `${data.items.length * 5}s`);
+        feed.classList.add('animated');
+      }
+
+    } catch (err) {
+      feed.innerHTML = '<div class="empty-state">Could not load newsletter</div>';
+      count.textContent = 'ERROR';
+      console.error(err);
+    }
+  }
+
+  loadNewsletter();
 </script>
 
 </body>
