@@ -16,94 +16,92 @@
     --border: #222;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
-  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; border-bottom: 1px solid var(--border); }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
   .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; }
   .logo span { color: var(--red); }
   .nav-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
 
-  .hero { padding: 36px 48px 32px; max-width: 860px; }
-  .hero-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+  /* MAIN SPLIT LAYOUT */
+  .main { display: flex; flex: 1; min-height: 0; }
+
+  /* HERO — left column */
+  .hero {
+    width: 380px;
+    flex-shrink: 0;
+    padding: 48px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
   .hero-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
-  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 58px); line-height: 0.9; letter-spacing: 2px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 4vw, 72px); line-height: 0.9; letter-spacing: 2px; margin-bottom: 18px; }
   .hero h1 em { font-style: normal; color: var(--red); display: block; }
-  .hero p { font-size: 13px; font-weight: 300; line-height: 1.85; color: #999; max-width: 540px; margin-bottom: 20px; }
+  .hero p { font-size: 13px; font-weight: 300; line-height: 1.8; color: #999; margin-bottom: 28px; }
   .hero p strong { color: var(--white); font-weight: 600; }
-  .cta { display: inline-block; background: var(--red); color: var(--white); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 11px 26px; text-decoration: none; transition: background 0.2s; }
+  .cta { display: inline-block; background: var(--red); color: var(--white); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 28px; text-decoration: none; transition: background 0.2s; align-self: flex-start; }
   .cta:hover { background: var(--red-dim); }
 
-  hr { border: none; border-top: 1px solid var(--border); margin: 0 48px; }
-
-  /* POSTS SECTION */
-  .posts-section { padding: 64px 0 80px; }
-  .section-header { display: flex; align-items: baseline; gap: 18px; margin-bottom: 32px; padding: 0 48px; }
-  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 3px; }
+  /* POSTS — right column */
+  .posts-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 0 48px 0;
+    overflow: hidden;
+  }
+  .section-header { display: flex; align-items: baseline; gap: 18px; margin-bottom: 28px; padding: 0 48px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; }
   .section-count { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 2px; }
 
   /* CAROUSEL */
-  .carousel-container {
-    width: 100%;
-    overflow: hidden;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: #0a0a0a;
-    padding: 24px 0;
-  }
+  .carousel-container { overflow: hidden; flex: 1; display: flex; align-items: stretch; }
   .carousel-track {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     padding: 0 48px;
     width: max-content;
+    align-items: stretch;
   }
-  .carousel-track.animated {
-    animation: scrollPosts var(--scroll-duration, 30s) linear infinite;
-  }
+  .carousel-track.animated { animation: scrollPosts var(--scroll-duration, 30s) linear infinite; }
   .carousel-track:hover { animation-play-state: paused; }
 
   /* POST CARD */
   .post-card {
-    flex: 0 0 260px;
+    flex: 0 0 240px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
     color: var(--white);
-    position: relative;
     transition: border-color 0.2s, transform 0.2s;
   }
-  .post-card:hover {
-    border-color: var(--red);
-    transform: translateY(-2px);
-  }
+  .post-card:hover { border-color: var(--red); transform: translateY(-2px); }
   .post-card-top { display: flex; align-items: center; gap: 10px; }
-  .avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--red-dim);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif; font-size: 13px;
-    color: var(--white); flex-shrink: 0; overflow: hidden;
-  }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--white); flex-shrink: 0; overflow: hidden; }
   .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .post-author { font-size: 12px; font-weight: 600; color: var(--white); }
   .post-time { font-family: 'Space Mono', monospace; font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
-  .post-title { font-size: 14px; font-weight: 600; color: var(--white); line-height: 1.35; }
+  .post-title { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.35; }
   .post-preview { font-size: 12px; font-weight: 300; color: #666; line-height: 1.65; flex: 1; }
   .post-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
   .post-read { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
   .post-read::after { content: ' →'; }
-  .post-stats { display: flex; gap: 8px; }
-  .stat { font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 7px; border: 1px solid var(--border); color: #555; letter-spacing: 1px; }
+  .post-stats { display: flex; gap: 6px; }
+  .stat { font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 6px; border: 1px solid var(--border); color: #555; }
   .stat.likes { color: #ff4f81; border-color: #ff4f8133; }
   .stat.comments { color: var(--gold); border-color: #d4a84333; }
 
-  .empty-state { text-align: center; padding: 60px 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
+  .empty-state { padding: 0 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
 
-  footer { border-top: 1px solid var(--border); padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; }
+  footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: #2a2a2a; }
   .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: #333; letter-spacing: 2px; }
 
@@ -112,11 +110,11 @@
     100% { transform: translateX(var(--scroll-distance, -50%)); }
   }
 
-  @media (max-width: 640px) {
-    nav, .hero, footer { padding-left: 20px; padding-right: 20px; }
-    hr { margin: 0 20px; }
-    .section-header { padding: 0 20px; }
-    .carousel-track { padding: 0 20px; }
+  @media (max-width: 860px) {
+    .main { flex-direction: column; }
+    .hero { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 36px 20px; }
+    nav, footer { padding-left: 20px; padding-right: 20px; }
+    .section-header, .carousel-track, .empty-state { padding-left: 20px; padding-right: 20px; }
   }
 </style>
 </head>
@@ -127,32 +125,31 @@
   <div class="nav-tag">The Zetsumetsu Corporation</div>
 </nav>
 
-<section class="hero">
-  <div class="hero-label">Live R&amp;D Operation</div>
-  <h1>Inside <em>The Build</em></h1>
-  <p>
-    ZetsuEDU is not a course. It is not a community. It is <strong>inside access to The Zetsumetsu Corporation being built in real time.</strong>
-    Accepted members see the decisions, the systems, the failures, and the wins as they happen.
-    If you want to learn by watching something real get built from zero, this is it.
-  </p>
-  <a class="cta" href="https://www.skool.com" target="_blank">Join on Skool</a>
-</section>
+<div class="main">
 
-<hr/>
+  <section class="hero">
+    <div class="hero-label">Live R&amp;D Operation</div>
+    <h1>Inside <em>The Build</em></h1>
+    <p>
+      ZetsuEDU is not a course. It is not a community. It is <strong>inside access to The Zetsumetsu Corporation being built in real time.</strong>
+      Accepted members see the decisions, the systems, the failures, and the wins as they happen.
+    </p>
+    <a class="cta" href="https://www.skool.com" target="_blank">Join on Skool</a>
+  </section>
 
-<section class="posts-section">
-  <div class="section-header">
-    <div class="section-title">Latest Posts</div>
-    <div class="section-count" id="post-count">0 ENTRIES</div>
-  </div>
-  <div class="carousel-container">
-    <div class="carousel-track" id="posts-feed">
-      <div class="empty-state">No posts yet — check back soon</div>
+  <div class="posts-col">
+    <div class="section-header">
+      <div class="section-title">Latest Posts</div>
+      <div class="section-count" id="post-count">0 ENTRIES</div>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-track" id="posts-feed">
+        <div class="empty-state">No posts yet — check back soon</div>
+      </div>
     </div>
   </div>
-</section>
 
-<hr/>
+</div>
 
 <footer>
   <div class="footer-brand">Zetsumetsu Corp.</div>
@@ -189,7 +186,7 @@
           </div>
         </div>
         ${p.title ? `<div class="post-title">${p.title}</div>` : ''}
-        ${p.body  ? `<div class="post-preview">${p.body.slice(0, 120)}...</div>` : ''}
+        ${p.body  ? `<div class="post-preview">${p.body.slice(0, 100)}...</div>` : ''}
         <div class="post-footer">
           <div class="post-read">Read Post</div>
           <div class="post-stats">
@@ -200,12 +197,11 @@
       </a>
     `).join('');
 
-    // Duplicate cards for seamless loop if enough posts
     const shouldLoop = posts.length >= 3;
     feed.innerHTML = shouldLoop ? cards + cards : cards;
 
     if (shouldLoop) {
-      const cardWidth = 260 + 16; // card width + gap
+      const cardWidth = 240 + 12;
       const totalWidth = posts.length * cardWidth;
       feed.style.setProperty('--scroll-distance', `-${totalWidth}px`);
       feed.style.setProperty('--scroll-duration', `${posts.length * 4}s`);
