@@ -20,21 +20,17 @@
   h1 { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 3px; margin-bottom: 8px; }
   h1 span { color: var(--red); }
   .sub { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 36px; }
-  .input-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-  input[type="text"] { background: #141414; border: 1px solid var(--border); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 12px 16px; flex: 1; min-width: 300px; outline: none; }
-  input[type="text"]:focus { border-color: var(--red); }
   button { background: var(--red); color: var(--white); border: none; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 12px 24px; cursor: pointer; }
   button:hover { background: var(--red-dim); }
   button.secondary { background: #1a1a1a; border: 1px solid var(--border); color: var(--gold); }
   button.secondary:hover { border-color: var(--gold); }
-  .status { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #555; margin-bottom: 24px; min-height: 18px; }
+  .status { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #555; margin: 24px 0; min-height: 18px; }
   .status.ok { color: var(--gold); }
   .status.err { color: var(--red); }
   hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   .json-box { background: #0e0e0e; border: 1px solid var(--border); padding: 20px; font-family: 'Space Mono', monospace; font-size: 11px; color: #666; white-space: pre-wrap; max-height: 320px; overflow-y: auto; margin-bottom: 16px; }
   .posts-feed { display: flex; flex-direction: column; gap: 2px; max-width: 720px; margin-top: 32px; }
-  .post-card { background: var(--card); border: 1px solid var(--border); padding: 24px 28px; text-decoration: none; display: block; }
-  .post-card:hover { background: #1a1a1a; border-color: #333; }
+  .post-card { background: var(--card); border: 1px solid var(--border); padding: 24px 28px; display: block; }
   .post-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--white); flex-shrink: 0; overflow: hidden; }
   .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -44,8 +40,6 @@
   .post-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.35; }
   .post-preview { font-size: 13px; font-weight: 300; color: #777; line-height: 1.7; margin-bottom: 16px; }
   .post-footer { display: flex; align-items: center; justify-content: space-between; }
-  .post-read { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
-  .post-read::after { content: ' →'; }
   .post-stats { font-family: 'Space Mono', monospace; font-size: 10px; color: #444; letter-spacing: 1px; }
   .empty-state { text-align: center; padding: 60px 0; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
   .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
@@ -60,28 +54,23 @@
 <div class="sub">ZetsuEDU — Post Feed Builder</div>
 
 <div class="instructions">
-  <strong>HOW TO USE:</strong><br/>
-  1. Open your Skool community feed in another tab<br/>
-  2. Paste the tab URL below<br/>
-  3. Hit Scrape — reads the live DOM using Backpack selectors<br/>
-  4. Copy or download the JSON, then load it into ZetsuEDU
+  <strong>HOW IT WORKS:</strong><br/>
+  Backpack scrapes posts from your live Skool feed automatically.<br/>
+  Open this page on a Skool tab with Backpack active, then hit Load Posts.
 </div>
 
-<div class="input-row">
-  <input type="text" id="skool-url" placeholder="https://www.skool.com/yourgroup/feed" />
-  <button onclick="scrape()">Scrape Posts</button>
+<div class="row">
+  <button onclick="loadPosts()">Load Posts</button>
+  <button class="secondary" onclick="copyJSON()">Copy JSON</button>
+  <button class="secondary" onclick="downloadJSON()">Download JSON</button>
 </div>
 
 <div class="status" id="status">Waiting...</div>
 
 <hr/>
 
-<div class="row" style="margin-bottom:16px;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;">JSON Output</div>
-  <button class="secondary" onclick="copyJSON()">Copy JSON</button>
-  <button class="secondary" onclick="downloadJSON()">Download JSON</button>
-</div>
-<div class="json-box" id="json-output">// JSON will appear here after scraping</div>
+<div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:16px;">JSON Output</div>
+<div class="json-box" id="json-output">// JSON will appear here after loading</div>
 
 <hr/>
 
@@ -91,85 +80,35 @@
 </div>
 
 <script>
-  let scrapedPosts = [];
+  let loadedPosts = [];
 
-  // Exact selectors from Backpack v68 content.js getRecentPostData()
-  const SEL = {
-    wrapper:  '.styled__PostItemCardWrapper-sc-6yboky-0',
-    avatar:   '.styled__AvatarWrapper-sc-1ruw40r-0 img',
-    author:   '.styled__UserNameText-sc-24o0l3-1.gnbcTj',
-    badge:    '.styled__BadgeWrapper-sc-1o1lx2q-2.iVfNoI',
-    time:     '.styled__PostTimeContent-sc-vh0utx-8.diHWQw',
-    title:    '.styled__Title-sc-vh0utx-12.griAFY',
-    body:     '.styled__ContentPreviewWrapper-sc-vh0utx-13.erGJuk',
-    media:    'img.styled__PreviewImage-sc-vh0utx-17',
-    likes:    '.styled__LikesCount-sc-e4ns84-3.hCeSxM',
-    comments: '.styled__CommentsCount-sc-e4ns84-4.fZDvok',
-    link:     'a[href*="?p="]'
-  };
+  // Listen for response back from content.js
+  window.addEventListener('message', (e) => {
+    if (!e.data || e.data.action !== 'zetsu_card2PostsResponse') return;
 
-  async function scrape() {
-    const url = document.getElementById('skool-url').value.trim();
-    if (!url) { setStatus('Paste a Skool URL first.', 'err'); return; }
-    setStatus('Fetching page...');
+    const posts = e.data.posts;
 
-    try {
-      const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
-      const res = await fetch(proxy);
-      const data = await res.json();
-
-      if (!data.contents) { setStatus('No content returned.', 'err'); return; }
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data.contents, 'text/html');
-      const posts = extractPosts(doc, url);
-
-      if (!posts.length) {
-        setStatus('No posts detected. Confirm the URL loads your feed.', 'err');
-        return;
-      }
-
-      scrapedPosts = posts;
-      renderJSON(posts);
-      renderPosts(posts);
-      setStatus('Scraped ' + posts.length + ' post(s).', 'ok');
-
-    } catch (err) {
-      setStatus('Error: ' + err.message, 'err');
+    if (!posts || posts.length === 0) {
+      setStatus('No posts in the Bag yet. Make sure Backpack is active on this Skool tab.', 'err');
+      return;
     }
-  }
 
-  function extractPosts(doc, baseUrl) {
-    const wrappers = doc.querySelectorAll(SEL.wrapper);
-    const posts = [];
+    loadedPosts = posts;
+    renderJSON(posts);
+    renderPosts(posts);
+    setStatus('Loaded ' + posts.length + ' post(s) from the Bag.', 'ok');
+  });
 
-    wrappers.forEach(el => {
-      const avatarSrc = el.querySelector(SEL.avatar)?.src || '';
-      const author    = el.querySelector(SEL.author)?.textContent?.trim() || 'Unknown';
-      const badge     = el.querySelector(SEL.badge)?.textContent?.trim() || '';
-      const timeText  = el.querySelector(SEL.time)?.textContent?.trim().split(' ')[0] || '';
-      const title     = el.querySelector(SEL.title)?.textContent?.trim() || '';
-      const body      = el.querySelector(SEL.body)?.textContent?.trim() || '';
-      const media     = el.querySelector(SEL.media)?.src || null;
-      const likes     = parseInt(el.querySelector(SEL.likes)?.textContent || '0') || 0;
-      const comments  = parseInt(el.querySelector(SEL.comments)?.textContent || '0') || 0;
-      const href      = el.querySelector(SEL.link)?.getAttribute('href') || '';
-      const link      = href.startsWith('http') ? href : 'https://www.skool.com' + href;
+  function loadPosts() {
+    setStatus('Requesting posts from Backpack...');
+    window.postMessage({ action: 'zetsu_getCard2Posts' }, '*');
 
-      posts.push({ avatar: avatarSrc, author, badge, time: timeText, title, body, media, likes, comments, link });
-    });
-
-    posts.sort((a, b) => parseMinutes(a.time) - parseMinutes(b.time));
-    return posts;
-  }
-
-  function parseMinutes(t) {
-    if (!t) return 9999;
-    const unit = t.slice(-1);
-    const val  = parseInt(t);
-    if (unit === 'h') return val * 60;
-    if (unit === 'd') return val * 1440;
-    return val;
+    // Timeout fallback if content.js doesn't respond
+    setTimeout(() => {
+      if (!loadedPosts.length) {
+        setStatus('No response. Make sure Backpack is installed and active on this tab.', 'err');
+      }
+    }, 3000);
   }
 
   function renderJSON(posts) {
@@ -178,25 +117,27 @@
 
   function renderPosts(posts) {
     const feed = document.getElementById('posts-feed');
-    if (!posts.length) { feed.innerHTML = '<div class="empty-state">No posts found</div>'; return; }
+    if (!posts.length) {
+      feed.innerHTML = '<div class="empty-state">No posts found</div>';
+      return;
+    }
     feed.innerHTML = posts.map(p => `
-      <a class="post-card" href="${p.link}" target="_blank">
+      <div class="post-card">
         <div class="post-card-top">
           <div class="avatar">
-            ${p.avatar ? `<img src="${p.avatar}" alt="${p.author}" />` : (p.author[0] || 'Z').toUpperCase()}
+            ${p.avatar ? `<img src="${p.avatar}" alt="${p.author}" />` : (p.author?.[0] || 'Z').toUpperCase()}
           </div>
           <div>
             <div class="post-author">${p.author}${p.badge ? ' · ' + p.badge : ''}</div>
-            <div class="post-date-tag">${p.time || ''} &nbsp;·&nbsp; <span class="post-tag">ZetsuEDU</span></div>
+            <div class="post-date-tag">${p.timeText || ''} &nbsp;·&nbsp; <span class="post-tag">ZetsuEDU</span></div>
           </div>
         </div>
         ${p.title ? `<div class="post-title">${p.title}</div>` : ''}
         ${p.body  ? `<div class="post-preview">${p.body.slice(0, 160)}...</div>` : ''}
         <div class="post-footer">
-          <div class="post-read">Read Post</div>
-          <div class="post-stats">♥ ${p.likes} &nbsp; 💬 ${p.comments}</div>
+          <div class="post-stats">♥ ${p.likes || 0} &nbsp; 💬 ${p.comments || 0}</div>
         </div>
-      </a>
+      </div>
     `).join('');
   }
 
