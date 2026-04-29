@@ -39,7 +39,8 @@
   .post-card { background: var(--card); border: 1px solid var(--border); padding: 24px 28px; text-decoration: none; display: block; transition: border-color 0.15s, background 0.15s; }
   .post-card:hover { background: #1a1a1a; border-color: #333; }
   .post-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--white); flex-shrink: 0; letter-spacing: 1px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red-dim); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--white); flex-shrink: 0; letter-spacing: 1px; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .post-meta { display: flex; flex-direction: column; gap: 3px; }
   .post-author { font-size: 13px; font-weight: 600; color: var(--white); }
   .post-date-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
@@ -96,6 +97,45 @@
   <div class="footer-brand">Zetsumetsu Corp.</div>
   <div class="footer-note">Detroit, MI &nbsp;&middot;&nbsp; Built from scratch</div>
 </footer>
+
+<script>
+  window.addEventListener('message', (e) => {
+    if (!e.data || e.data.type !== 'ZETSU_CARD2_POSTS') return;
+    renderPosts(e.data.posts || []);
+  });
+
+  function renderPosts(posts) {
+    const feed = document.getElementById('posts-feed');
+    const count = document.getElementById('post-count');
+
+    if (!posts.length) {
+      feed.innerHTML = '<div class="empty-state">No posts yet — check back soon</div>';
+      count.textContent = '0 ENTRIES';
+      return;
+    }
+
+    count.textContent = posts.length + ' ' + (posts.length === 1 ? 'ENTRY' : 'ENTRIES');
+    feed.innerHTML = posts.map(p => `
+      <a class="post-card" href="${p.link || '#'}" target="_blank">
+        <div class="post-card-top">
+          <div class="avatar">
+            ${p.avatar ? `<img src="${p.avatar}" alt="${p.author}" />` : (p.author?.[0] || 'Z').toUpperCase()}
+          </div>
+          <div class="post-meta">
+            <div class="post-author">${p.author || ''}${p.badge ? ' · ' + p.badge : ''}</div>
+            <div class="post-date-tag">${p.timeText || ''} &nbsp;·&nbsp; <span class="post-tag">ZetsuEDU</span></div>
+          </div>
+        </div>
+        ${p.title ? `<div class="post-title">${p.title}</div>` : ''}
+        ${p.body  ? `<div class="post-preview">${p.body.slice(0, 160)}...</div>` : ''}
+        <div class="post-footer">
+          <div class="post-read">Read Post</div>
+          <div class="post-pinned">♥ ${p.likes || 0} &nbsp; 💬 ${p.comments || 0}</div>
+        </div>
+      </a>
+    `).join('');
+  }
+</script>
 
 </body>
 </html>
