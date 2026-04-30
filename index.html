@@ -164,7 +164,7 @@
 
   async function loadFromSupabase() {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?order=updated_at.desc&limit=20`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?order=scraped_at.desc&limit=20`, {
         headers: {
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`
@@ -188,49 +188,6 @@
       console.error('Supabase load error:', e);
     }
   }
-
-  async function saveToSupabase(posts) {
-    try {
-      const rows = posts.map(p => ({
-        post_id: p.link || p.title,
-        author: p.author || null,
-        badge: p.badge || null,
-        avatar: p.avatar || null,
-        title: p.title || null,
-        body: p.body || null,
-        likes: p.likes || 0,
-        comments: p.comments || 0,
-        time_text: p.timeText || null,
-        link: p.link || null,
-        updated_at: new Date().toISOString()
-      }));
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates,return=minimal'
-        },
-        body: JSON.stringify(rows)
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        console.error('Supabase save failed:', err);
-      }
-    } catch (e) {
-      console.error('Supabase save error:', e);
-    }
-  }
-
-  window.addEventListener('message', (e) => {
-    if (!e.data || e.data.type !== 'ZETSU_CARD2_POSTS') return;
-    const posts = e.data.posts || [];
-    renderPosts(posts);
-    saveToSupabase(posts);
-  });
 
   function renderPosts(posts) {
     const feed = document.getElementById('posts-feed');
