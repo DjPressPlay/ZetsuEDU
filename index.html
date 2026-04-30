@@ -25,10 +25,8 @@
   .logo span { color: var(--red); }
   .nav-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
 
-  /* MAIN SPLIT LAYOUT */
   .main { display: flex; flex: 1; min-height: 0; }
 
-  /* HERO — left column */
   .hero {
     width: 380px;
     flex-shrink: 0;
@@ -47,7 +45,6 @@
   .cta { display: inline-block; background: var(--red); color: var(--white); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 28px; text-decoration: none; transition: background 0.2s; align-self: flex-start; }
   .cta:hover { background: var(--red-dim); }
 
-  /* POSTS — right column */
   .posts-col {
     flex: 1;
     min-width: 0;
@@ -60,7 +57,6 @@
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; }
   .section-count { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 2px; }
 
-  /* CAROUSEL */
   .carousel-container { overflow: hidden; flex: 1; display: flex; align-items: stretch; }
   .carousel-track {
     display: flex;
@@ -72,7 +68,6 @@
   .carousel-track.animated { animation: scrollPosts var(--scroll-duration, 30s) linear infinite; }
   .carousel-track:hover { animation-play-state: paused; }
 
-  /* POST CARD */
   .post-card {
     flex: 0 0 240px;
     background: var(--card);
@@ -103,6 +98,9 @@
 
   .empty-state { padding: 0 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
 
+  .embed-section { border-top: 1px solid var(--border); padding: 48px; display: flex; flex-wrap: wrap; gap: 16px; }
+  .embed-section .substack-post-embed { flex: 1 1 200px; }
+
   footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: #2a2a2a; }
   .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: #333; letter-spacing: 2px; }
@@ -117,6 +115,7 @@
     .hero { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 36px 20px; }
     nav, footer { padding-left: 20px; padding-right: 20px; }
     .section-header, .carousel-track, .empty-state { padding-left: 20px; padding-right: 20px; }
+    .embed-section { padding: 36px 20px; }
   }
 </style>
 </head>
@@ -155,6 +154,15 @@
     </div>
   </div>
 
+</div>
+
+<div class="embed-section">
+  <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
+  <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
+  <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
+  <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
+  <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
+  <script async src="https://substack.com/embedjs/embed.js" charset="utf-8"></script>
 </div>
 
 <footer>
