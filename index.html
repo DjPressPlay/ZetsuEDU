@@ -25,10 +25,8 @@
   .logo span { color: var(--red); }
   .nav-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
 
-  /* MAIN SPLIT LAYOUT */
   .main { display: flex; flex: 1; min-height: 0; }
 
-  /* HERO — left column */
   .hero {
     width: 380px;
     flex-shrink: 0;
@@ -47,7 +45,6 @@
   .cta { display: inline-block; background: var(--red); color: var(--white); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 28px; text-decoration: none; transition: background 0.2s; align-self: flex-start; }
   .cta:hover { background: var(--red-dim); }
 
-  /* POSTS — right column */
   .posts-col {
     flex: 1;
     min-width: 0;
@@ -60,7 +57,6 @@
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; }
   .section-count { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 2px; }
 
-  /* CAROUSEL */
   .carousel-container { overflow: hidden; flex: 1; display: flex; align-items: stretch; }
   .carousel-track {
     display: flex;
@@ -72,7 +68,6 @@
   .carousel-track.animated { animation: scrollPosts var(--scroll-duration, 30s) linear infinite; }
   .carousel-track:hover { animation-play-state: paused; }
 
-  /* POST CARD */
   .post-card {
     flex: 0 0 240px;
     background: var(--card);
@@ -163,9 +158,76 @@
 </footer>
 
 <script>
+  const SUPABASE_URL = 'https://jqvnrdjrkdjgjbmqmbbl.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impxdm5yZGpya2RqZ2pibXFtYmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTIwOTcsImV4cCI6MjA2NjgyODA5N30.5hMfCI3jir8PK2Aa1Z6w152EGYGSQFlPysk4CaxpmI8';
+  const TABLE = 'zetsu_edu';
+
+  // On load — fetch from Supabase so everyone sees posts
+  async function loadFromSupabase() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?order=updated_at.desc&limit=20`, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+      const data = await res.json();
+      if (data && data.length) {
+        renderPosts(data.map(row => ({
+          link: row.link,
+          avatar: row.avatar,
+          author: row.author,
+          badge: row.badge,
+          timeText: row.time_text,
+          title: row.title,
+          body: row.body,
+          likes: row.likes,
+          comments: row.comments
+        })));
+      }
+    } catch (e) {
+      console.error('Supabase load error:', e);
+    }
+  }
+
+  // Save posts to Supabase (upsert by post_id)
+  async function saveToSupabase(posts) {
+    try {
+      const rows = posts.map(p => ({
+        post_id: p.link || p.title,
+        author: p.author || null,
+        badge: p.badge || null,
+        avatar: p.avatar || null,
+        title: p.title || null,
+        body: p.body || null,
+        likes: p.likes || 0,
+        comments: p.comments || 0,
+        time_text: p.timeText || null,
+        link: p.link || null,
+        updated_at: new Date().toISOString()
+      }));
+
+      await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(rows)
+      });
+    } catch (e) {
+      console.error('Supabase save error:', e);
+    }
+  }
+
+  // Backpack sends posts
   window.addEventListener('message', (e) => {
     if (!e.data || e.data.type !== 'ZETSU_CARD2_POSTS') return;
-    renderPosts(e.data.posts || []);
+    const posts = e.data.posts || [];
+    renderPosts(posts);
+    saveToSupabase(posts);
   });
 
   function renderPosts(posts) {
@@ -214,6 +276,9 @@
       feed.classList.add('animated');
     }
   }
+
+  // Load on page open
+  loadFromSupabase();
 </script>
 
 </body>
