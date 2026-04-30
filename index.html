@@ -154,24 +154,13 @@
 
 <div style="border-top: 1px solid var(--border); padding: 48px; background: #0a0a0a;">
   <div style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; margin-bottom: 28px;">Featured <span style="color: var(--red);">Posts</span></div>
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);">
-      <!-- EMBED 1 -->
-      <div class="substack-post-embed"><p lang="en">ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR</p><p>Stop wasting hours on ad copy. One input. 24 styles. Instant results.</p><a data-post-link href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator">Read on Substack</a></div>
-    </div>
-    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);">
-      <!-- EMBED 2 -->
-    </div>
-    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);">
-      <!-- EMBED 3 -->
-    </div>
-    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);">
-      <!-- EMBED 4 -->
-    </div>
+  <div id="substack-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card); color: #333; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px;">LOADING...</div>
+    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);"></div>
+    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);"></div>
+    <div style="border: 1px solid var(--border); padding: 24px; background: var(--card);"></div>
   </div>
 </div>
-
-<script async src="https://substack.com/embedjs/embed.js" charset="utf-8"></script>
 
 <footer>
   <div class="footer-brand">Zetsumetsu Corp.</div>
@@ -258,6 +247,43 @@
   }
 
   loadFromSupabase();
+
+  // ── SUBSTACK RSS ─────────────────────────────────────────────────────────────
+  async function loadSubstackPosts() {
+    const grid = document.getElementById('substack-grid');
+    try {
+      const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://zetsumetsu.substack.com/feed'));
+      const data = await res.json();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(data.contents, 'text/xml');
+      const items = Array.from(xml.querySelectorAll('item')).slice(0, 4);
+
+      if (!items.length) { grid.innerHTML = '<div style="color:#333;font-family:Space Mono,monospace;font-size:10px;letter-spacing:2px;">NO POSTS FOUND</div>'; return; }
+
+      // Pad to 4 empty slots if fewer than 4 posts
+      while (items.length < 4) items.push(null);
+
+      grid.innerHTML = items.map(item => {
+        if (!item) return `<div style="border:1px solid var(--border);padding:24px;background:var(--card);"></div>`;
+        const title = item.querySelector('title')?.textContent || '';
+        const link  = item.querySelector('link')?.textContent || '#';
+        const desc  = item.querySelector('description')?.textContent?.replace(/<[^>]+>/g, '').slice(0, 100) || '';
+        const date  = new Date(item.querySelector('pubDate')?.textContent).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return `
+          <a href="${link}" target="_blank" style="border:1px solid var(--border);padding:24px;background:var(--card);display:flex;flex-direction:column;gap:12px;text-decoration:none;color:var(--white);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">${date}</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;line-height:1.1;">${title}</div>
+            <div style="font-size:12px;color:#666;line-height:1.65;flex:1;">${desc}...</div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--red);text-transform:uppercase;">Read on Substack →</div>
+          </a>`;
+      }).join('');
+    } catch (e) {
+      console.error('Substack RSS error:', e);
+      grid.innerHTML = '<div style="color:#333;font-family:Space Mono,monospace;font-size:10px;letter-spacing:2px;padding:24px;">COULD NOT LOAD POSTS</div>';
+    }
+  }
+
+  loadSubstackPosts();
 </script>
 
 </body>
