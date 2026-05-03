@@ -99,6 +99,49 @@
 
   .empty-state { padding: 0 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
 
+  .shop-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--white);
+    transition: border-color 0.2s, transform 0.2s;
+    padding-bottom: 16px;
+  }
+  .shop-card:hover { border-color: var(--red); transform: translateY(-2px); }
+  .shop-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #1a1a1a;
+    border-bottom: 1px solid var(--border);
+  }
+  .shop-name {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 14px;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .shop-desc {
+    font-size: 11px;
+    font-weight: 300;
+    color: #666;
+    padding: 0 14px;
+    line-height: 1.6;
+    flex: 1;
+  }
+  .shop-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+    padding: 0 14px;
+    margin-top: 4px;
+  }
+
   footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 4px; color: #2a2a2a; }
   .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: #333; letter-spacing: 2px; }
@@ -167,12 +210,40 @@
   </section>
 
   <div class="posts-col">
-    <div style="padding: 48px; display: flex; flex-direction: column; justify-content: center; height: 100%;">
-      <p style="font-size: 13px; font-weight: 300; line-height: 1.8; color: #999; margin-bottom: 28px;">ZetsuEDU is our newsletter. Every issue we break down one thing we built, learned, or figured out. Written clearly so you can actually use it. It's free, it's direct, and it comes straight to your inbox.</p>
-      <a class="cta" href="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator" target="_blank">Read the latest issue and subscribe</a>
+    <div class="section-header">
+      <div class="section-title">Shop</div>
+      <div class="section-count">3 ITEMS</div>
+    </div>
+    <div style="padding: 0 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+
+      <a class="shop-card" href="#" target="_blank">
+        <div class="shop-img"></div>
+        <div class="shop-name">Product Name</div>
+        <div class="shop-desc">Short description of what this is and why they need it.</div>
+        <div class="shop-link">Get It →</div>
+      </a>
+
+      <a class="shop-card" href="#" target="_blank">
+        <div class="shop-img"></div>
+        <div class="shop-name">Product Name</div>
+        <div class="shop-desc">Short description of what this is and why they need it.</div>
+        <div class="shop-link">Get It →</div>
+      </a>
+
+      <a class="shop-card" href="#" target="_blank">
+        <div class="shop-img"></div>
+        <div class="shop-name">Product Name</div>
+        <div class="shop-desc">Short description of what this is and why they need it.</div>
+        <div class="shop-link">Get It →</div>
+      </a>
+
     </div>
   </div>
 
+</div>
+
+<div class="ad-bar">
+  <iframe src="https://zetsuedu.com/ad" scrolling="no" frameborder="0"></iframe>
 </div>
 
 <footer>
