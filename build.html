@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZetsuBuild — Site Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================================
+       BUILDER SHELL
+    ============================================================ */
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#080808;color:#f0ece4;font-family:'DM Sans',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+    /* TOP BAR */
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid #222;flex-shrink:0;background:#0a0a0a;}
+    .topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;}
+    .topbar-logo span{color:#c0392b;}
+    .topbar-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:#d4a843;text-transform:uppercase;}
+    .topbar-actions{display:flex;gap:8px;}
+
+    /* BUTTONS */
+    .btn{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;background:transparent;color:#f0ece4;border:1px solid #333;cursor:pointer;transition:all 0.15s;}
+    .btn:hover{border-color:#c0392b;color:#c0392b;}
+    .btn.primary{background:#c0392b;border-color:#c0392b;color:#fff;}
+    .btn.primary:hover{background:#7a1f16;border-color:#7a1f16;}
+    .btn.success{background:#1a6b3a;border-color:#1a6b3a;color:#fff;}
+
+    /* BODY LAYOUT */
+    .builder-body{display:flex;flex:1;min-height:0;}
+
+    /* LEFT PANEL */
+    .left-panel{width:300px;flex-shrink:0;border-right:1px solid #222;overflow-y:auto;background:#0c0c0c;}
+
+    /* SECTION ACCORDION */
+    .sec{border-bottom:1px solid #1a1a1a;}
+    .sec-head{padding:11px 16px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:#d4a843;text-transform:uppercase;background:#111;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+    .sec-head:hover{background:#161616;}
+    .sec-body{padding:14px 16px;display:flex;flex-direction:column;gap:9px;}
+    .sec-body.closed{display:none;}
+
+    /* FORM FIELDS */
+    .field{display:flex;flex-direction:column;gap:3px;}
+    .field label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:#666;text-transform:uppercase;}
+    .field input[type="text"],
+    .field input[type="url"],
+    .field textarea,
+    .field select{width:100%;background:#141414;border:1px solid #2a2a2a;color:#f0ece4;font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;outline:none;transition:border-color 0.15s;}
+    .field input:focus,.field textarea:focus{border-color:#c0392b;}
+    .field textarea{resize:vertical;min-height:56px;}
+    .field input[type="color"]{height:30px;padding:2px 4px;cursor:pointer;width:100%;}
+
+    .crow{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+    /* CARD FORM BLOCKS */
+    .card-block{background:#141414;border:1px solid #1e1e1e;padding:10px;margin-bottom:6px;}
+    .card-block:last-child{margin-bottom:0;}
+    .card-block-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:8px;}
+    .card-block .field{margin-bottom:5px;}
+    .card-block .field:last-child{margin-bottom:0;}
+
+    /* RIGHT PANEL */
+    .right-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
+    .preview-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid #222;background:#0a0a0a;flex-shrink:0;}
+    .preview-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:#555;text-transform:uppercase;}
+    .preview-actions{display:flex;gap:6px;}
+    .preview-frame{flex:1;border:none;background:#080808;}
+    .preview-notice{font-family:'Space Mono',monospace;font-size:8px;color:#2a2a2a;padding:5px 16px;border-top:1px solid #111;background:#080808;flex-shrink:0;letter-spacing:2px;text-transform:uppercase;}
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">Zetsu<span>BUILD</span></div>
+    <div class="topbar-tag">ZetsuEDU Template Generator</div>
+    <div class="topbar-actions">
+      <button class="btn" onclick="copyHTML()">Copy HTML</button>
+      <button class="btn primary" onclick="downloadHTML()">⬇ Download .html</button>
+    </div>
+  </div>
+
+  <div class="builder-body">
+
+    <!-- ============================================================
+         LEFT CONTROL PANEL
+    ============================================================ -->
+    <div class="left-panel">
+
+      <!-- IDENTITY -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Identity <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Site Name</label><input type="text" id="siteName" value="ZetsuEDU" oninput="debounce()"/></div>
+          <div class="field"><label>Logo Accent Word</label><input type="text" id="logoAccent" value="EDU" oninput="debounce()"/></div>
+          <div class="field"><label>Nav Tag Line</label><input type="text" id="navTag" value="The Zetsumetsu Corporation" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- THEME -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Theme <span>−</span></div>
+        <div class="sec-body">
+          <div class="crow">
+            <div class="field"><label>Primary Red</label><input type="color" id="cRed" value="#c0392b" oninput="debounce()"/></div>
+            <div class="field"><label>Accent Gold</label><input type="color" id="cGold" value="#d4a843" oninput="debounce()"/></div>
+          </div>
+          <div class="crow">
+            <div class="field"><label>Background</label><input type="color" id="cBg" value="#080808" oninput="debounce()"/></div>
+            <div class="field"><label>Card BG</label><input type="color" id="cCard" value="#141414" oninput="debounce()"/></div>
+          </div>
+          <div class="field"><label>Text / White</label><input type="color" id="cWhite" value="#f0ece4" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- HERO SIDEBAR -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Hero Sidebar <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Section Label</label><input type="text" id="heroLabel" value="Live R&D Operation" oninput="debounce()"/></div>
+          <div class="field"><label>H1 Line 1</label><input type="text" id="h1a" value="Inside" oninput="debounce()"/></div>
+          <div class="field"><label>H1 Line 2 (accent color)</label><input type="text" id="h1b" value="The Build" oninput="debounce()"/></div>
+          <div class="field"><label>Body Copy</label><textarea id="heroCopy" oninput="debounce()">ZetsuEDU is not a course. It is not a community. It is inside access to The Zetsumetsu Corporation being built in real time. Accepted members see the decisions, the systems, the failures, and the wins as they happen.</textarea></div>
+          <div class="field"><label>CTA Button Text</label><input type="text" id="ctaText" value="Join on Skool" oninput="debounce()"/></div>
+          <div class="field"><label>CTA Link URL</label><input type="url" id="ctaLink" value="https://www.skool.com" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- SUPABASE -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Supabase Config <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Project URL</label><input type="url" id="sbUrl" value="https://jqvnrdjrkdjgjbmqmbbl.supabase.co" oninput="debounce()"/></div>
+          <div class="field"><label>Anon Key</label><textarea id="sbKey" oninput="debounce()">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impxdm5yZGpya2RqZ2pibXFtYmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTIwOTcsImV4cCI6MjA2NjgyODA5N30.5hMfCI3jir8PK2Aa1Z6w152EGYGSQFlPysk4CaxpmI8</textarea></div>
+          <div class="field"><label>Table Name</label><input type="text" id="sbTable" value="zetsu_edu" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Newsletter Sidebar <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Section Label</label><input type="text" id="nlLabel" value="Free Weekly" oninput="debounce()"/></div>
+          <div class="field"><label>H1 Line 1</label><input type="text" id="nla" value="Our" oninput="debounce()"/></div>
+          <div class="field"><label>H1 Line 2 (accent)</label><input type="text" id="nlb" value="Newsletter" oninput="debounce()"/></div>
+          <div class="field"><label>Post Title</label><input type="text" id="nlTitle" value="ZETSU EDU AI AD GENERATOR by Artworqq KEVIN SUBER JR" oninput="debounce()"/></div>
+          <div class="field"><label>Post Description</label><input type="text" id="nlDesc" value="Stop wasting hours on ad copy. One input. 24 styles. Instant results." oninput="debounce()"/></div>
+          <div class="field"><label>Substack URL</label><input type="url" id="nlLink" value="https://zetsumetsu.substack.com/p/zetsu-edu-ai-ad-generator" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- SHOP ITEMS -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Shop Items <span>−</span></div>
+        <div class="sec-body">
+
+          <div class="card-block">
+            <div class="card-block-label">Item 1</div>
+            <div class="field"><label>Product Name</label><input type="text" id="sn1" value="Zetsumetsu EOe BOOKZ" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="sd1" value="The award-winning book. Detroit-built, Amazon bestselling." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="si1" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="sl1" value="#" oninput="debounce()"/></div>
+          </div>
+
+          <div class="card-block">
+            <div class="card-block-label">Item 2</div>
+            <div class="field"><label>Product Name</label><input type="text" id="sn2" value="Zetsu Merch Drop" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="sd2" value="Wear the reality. Limited runs, shipped from Detroit." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="si2" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="sl2" value="#" oninput="debounce()"/></div>
+          </div>
+
+          <div class="card-block">
+            <div class="card-block-label">Item 3</div>
+            <div class="field"><label>Product Name</label><input type="text" id="sn3" value="ZC Token Access" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="sd3" value="Get into the ecosystem. ZC tokens power the whole operation." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="si3" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="sl3" value="#" oninput="debounce()"/></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FREE GIFT BOX -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Free Gift Box <span>−</span></div>
+        <div class="sec-body">
+
+          <div class="card-block">
+            <div class="card-block-label">Gift 1</div>
+            <div class="field"><label>Name</label><input type="text" id="gn1" value="Salesman AI Ad Generator" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="gd1" value="Free trial access. One input, 24 ad styles, instant output." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="gi1" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="gl1" value="#" oninput="debounce()"/></div>
+          </div>
+
+          <div class="card-block">
+            <div class="card-block-label">Gift 2</div>
+            <div class="field"><label>Name</label><input type="text" id="gn2" value="Zetsu Portfolio Builder" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="gd2" value="Build a styled portfolio in minutes. Export PDF or PNG." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="gi2" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="gl2" value="#" oninput="debounce()"/></div>
+          </div>
+
+          <div class="card-block">
+            <div class="card-block-label">Gift 3</div>
+            <div class="field"><label>Name</label><input type="text" id="gn3" value="Zetsu Start Homepage" oninput="debounce()"/></div>
+            <div class="field"><label>Description</label><input type="text" id="gd3" value="Your new browser homepage. Black nav, clean search, Zetsu DNA." oninput="debounce()"/></div>
+            <div class="field"><label>Image URL</label><input type="url" id="gi3" value="" placeholder="https://..." oninput="debounce()"/></div>
+            <div class="field"><label>Link URL</label><input type="url" id="gl3" value="#" oninput="debounce()"/></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- AD BARS -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Ad Bars <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Top Ad iframe src</label><input type="url" id="adTop" value="https://zetsuedu.com/ad" oninput="debounce()"/></div>
+          <div class="field"><label>Bottom Ad iframe src</label><input type="url" id="adBot" value="https://zetsuedu.com/ad" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="sec">
+        <div class="sec-head" onclick="tog(this)">Footer <span>−</span></div>
+        <div class="sec-body">
+          <div class="field"><label>Brand Name</label><input type="text" id="footerBrand" value="Zetsumetsu Corp." oninput="debounce()"/></div>
+          <div class="field"><label>Tagline / Location</label><input type="text" id="footerNote" value="Detroit, MI · Built from scratch" oninput="debounce()"/></div>
+        </div>
+      </div>
+
+    </div><!-- /left-panel -->
+
+    <!-- ============================================================
+         RIGHT PREVIEW PANEL
+    ============================================================ -->
+    <div class="right-panel">
+      <div class="preview-bar">
+        <div class="preview-label">Live Preview</div>
+      </div>
+      <iframe class="preview-frame" id="preview"></iframe>
+      <div class="preview-notice">Updates on keystroke · 400ms debounce · Output is a standalone deployable file</div>
+    </div>
+
+  </div><!-- /builder-body -->
+
+  <!-- ============================================================
+       BUILDER JAVASCRIPT
+  ============================================================ -->
+  <script>
+
+    // ── ACCORDION TOGGLE ──────────────────────────────────────────
+    function tog(head){
+      const body = head.nextElementSibling;
+      const icon = head.querySelector('span');
+      body.classList.toggle('closed');
+      icon.textContent = body.classList.contains('closed') ? '+' : '−';
+    }
+
+    // Close all sections on load
+    document.querySelectorAll('.sec-body').forEach(b => b.classList.add('closed'));
+    document.querySelectorAll('.sec-head span').forEach(s => s.textContent = '+');
+
+    // ── FIELD VALUE HELPER ────────────────────────────────────────
+    function v(id){ const el=document.getElementById(id); return el ? el.value : ''; }
+
+    // ── SHADE COLOR HELPER ────────────────────────────────────────
+    function shade(hex, pct){
+      let n = parseInt(hex.replace('#',''), 16);
+      let r = Math.min(255, Math.max(0, (n>>16) + (pct*2.55)|0));
+      let g = Math.min(255, Math.max(0, ((n>>8)&0xff) + (pct*2.55)|0));
+      let b = Math.min(255, Math.max(0, (n&0xff) + (pct*2.55)|0));
+      return '#' + [r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+    }
+
+    // ── SHOP CARD HTML ────────────────────────────────────────────
+    function shopCard(name, desc, img, link){
+      const imgHtml = img
+        ? `<img src="${img}" alt="${name}" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-bottom:1px solid var(--border);"/>`
+        : `<div class="shop-img"></div>`;
+      return `
+        <a class="shop-card" href="${link||'#'}" target="_blank">
+          ${imgHtml}
+          <div class="shop-name">${name}</div>
+          <div class="shop-desc">${desc}</div>
+          <div class="shop-link">Get It →</div>
+        </a>`;
+    }
+
+    // ── GENERATE FULL HTML ────────────────────────────────────────
+    function generateHTML(){
+      const red   = v('cRed');
+      const gold  = v('cGold');
+      const bg    = v('cBg');
+      const card  = v('cCard');
+      const white = v('cWhite');
+      const redDim = shade(red, -30);
+
+      const siteName   = v('siteName');
+      const logoAccent = v('logoAccent');
+      const logoBase   = siteName.replace(logoAccent, '');
+
+      const shop1 = shopCard(v('sn1'), v('sd1'), v('si1'), v('sl1'));
+      const shop2 = shopCard(v('sn2'), v('sd2'), v('si2'), v('sl2'));
+      const shop3 = shopCard(v('sn3'), v('sd3'), v('si3'), v('sl3'));
+
+      const gift1 = shopCard(v('gn1'), v('gd1'), v('gi1'), v('gl1'));
+      const gift2 = shopCard(v('gn2'), v('gd2'), v('gi2'), v('gl2'));
+      const gift3 = shopCard(v('gn3'), v('gd3'), v('gi3'), v('gl3'));
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>${siteName}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    :root {
+      --black:   ${bg};
+      --red:     ${red};
+      --red-dim: ${redDim};
+      --gold:    ${gold};
+      --white:   ${white};
+      --card:    ${card};
+      --border:  #222;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 4px;
+    }
+    .logo span { color: var(--red); }
+    .nav-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* AD BAR */
+    .ad-bar {
+      width: 100%;
+      background: #0a0a0a;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      height: 200px;
+      flex-shrink: 0;
+    }
+    .ad-bar iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* MAIN LAYOUT */
+    .main {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* HERO SIDEBAR */
+    .hero {
+      width: 380px;
+      flex-shrink: 0;
+      padding: 48px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hero-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--red);
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 4vw, 72px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: normal; color: var(--red); display: block; }
+    .hero p {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #999;
+      margin-bottom: 28px;
+    }
+    .hero p strong { color: var(--white); font-weight: 600; }
+    .cta {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      text-decoration: none;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .cta:hover { background: var(--red-dim); }
+
+    /* POSTS COLUMN */
+    .posts-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 48px 0;
+      overflow: hidden;
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin-bottom: 28px;
+      padding: 0 48px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 3px;
+    }
+    .section-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    /* POSTS CAROUSEL */
+    .carousel-container {
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 12px;
+      padding: 0 48px;
+      width: max-content;
+      align-items: stretch;
+    }
+    .carousel-track.animated {
+      animation: scrollPosts var(--scroll-duration, 30s) linear infinite;
+    }
+    .carousel-track:hover { animation-play-state: paused; }
+    @keyframes scrollPosts {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(var(--scroll-distance, -50%)); }
+    }
+
+    /* POST CARD */
+    .post-card {
+      flex: 0 0 240px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .post-card:hover { border-color: var(--red); transform: translateY(-2px); }
+    .post-card-top { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--red-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 13px;
+      color: var(--white); flex-shrink: 0; overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .post-author  { font-size: 12px; font-weight: 600; color: var(--white); }
+    .post-time    { font-family: 'Space Mono', monospace; font-size: 9px; color: #555; letter-spacing: 1px; text-transform: uppercase; }
+    .post-title   { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.35; }
+    .post-preview { font-size: 12px; font-weight: 300; color: #666; line-height: 1.65; flex: 1; }
+    .post-footer  { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .post-read    { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+    .post-read::after { content: ' →'; }
+    .post-stats   { display: flex; gap: 6px; }
+    .stat         { font-family: 'Space Mono', monospace; font-size: 9px; padding: 3px 6px; border: 1px solid var(--border); color: #555; }
+    .stat.likes   { color: #ff4f81; border-color: #ff4f8133; }
+    .stat.comments{ color: var(--gold); border-color: #d4a84333; }
+    .empty-state  { padding: 0 48px; color: #333; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
+
+    /* SHOP / GIFT GRID */
+    .shop-grid {
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .shop-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color 0.2s, transform 0.2s;
+      padding-bottom: 16px;
+    }
+    .shop-card:hover { border-color: var(--red); transform: translateY(-2px); }
+    .shop-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #1a1a1a;
+      border-bottom: 1px solid var(--border);
+    }
+    .shop-name {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0 14px;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .shop-desc {
+      font-size: 11px;
+      font-weight: 300;
+      color: #666;
+      padding: 0 14px;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .shop-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--red);
+      text-transform: uppercase;
+      padding: 0 14px;
+      margin-top: 4px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 4px;
+      color: var(--white);
+    }
+    .footer-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 2px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .main      { flex-direction: column; }
+      .hero      { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 36px 20px; }
+      nav, footer{ padding-left: 20px; padding-right: 20px; }
+      .section-header, .carousel-track, .empty-state, .shop-grid { padding-left: 20px; padding-right: 20px; }
+      .shop-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">${logoBase}<span>${logoAccent}</span></div>
+    <div class="nav-tag">${v('navTag')}</div>
+  </nav>
+
+  <!-- TOP AD BAR -->
+  <div class="ad-bar">
+    <iframe src="${v('adTop')}" scrolling="no" frameborder="0"></iframe>
+  </div>
+
+  <!-- SECTION 1: HERO + POSTS CAROUSEL -->
+  <div class="main">
+
+    <section class="hero">
+      <div class="hero-label">${v('heroLabel')}</div>
+      <h1>${v('h1a')}<em>${v('h1b')}</em></h1>
+      <p>${v('heroCopy')}</p>
+      <a class="cta" href="${v('ctaLink')}" target="_blank">${v('ctaText')}</a>
+    </section>
+
+    <div class="posts-col">
+      <div class="section-header">
+        <div class="section-title">Latest Posts</div>
+        <div class="section-count" id="post-count">0 ENTRIES</div>
+      </div>
+      <div class="carousel-container">
+        <div class="carousel-track" id="posts-feed">
+          <div class="empty-state">No posts yet — check back soon</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2: NEWSLETTER + SHOP + GIFT BOX -->
+  <div class="main">
+
+    <section class="hero">
+      <div class="hero-label">${v('nlLabel')}</div>
+      <h1>${v('nla')}<em>${v('nlb')}</em></h1>
+      <div class="substack-post-embed">
+        <p lang="en">${v('nlTitle')}</p>
+        <p>${v('nlDesc')}</p>
+        <a data-post-link href="${v('nlLink')}">Read on Substack</a>
+      </div>
+      <script async src="https://substack.com/embedjs/embed.js" charset="utf-8"><\/script>
+    </section>
+
+    <div class="posts-col">
+
+      <!-- SHOP -->
+      <div class="section-header">
+        <div class="section-title">Shop</div>
+        <div class="section-count">3 ITEMS</div>
+      </div>
+      <div class="shop-grid">
+        ${shop1}
+        ${shop2}
+        ${shop3}
+      </div>
+
+      <!-- FREE GIFT BOX -->
+      <div class="section-header" style="margin-top: 48px;">
+        <div class="section-title">Free Gift Box</div>
+        <div class="section-count">3 ITEMS</div>
+      </div>
+      <div class="shop-grid">
+        ${gift1}
+        ${gift2}
+        ${gift3}
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM AD BAR -->
+  <div class="ad-bar">
+    <iframe src="${v('adBot')}" scrolling="no" frameborder="0"></iframe>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">${v('footerBrand')}</div>
+    <div class="footer-note">${v('footerNote')}</div>
+  </footer>
+
+  <!-- SUPABASE POSTS LOADER -->
+  <script>
+
+    const SUPABASE_URL = '${v('sbUrl')}';
+    const SUPABASE_KEY = '${v('sbKey')}';
+    const TABLE        = '${v('sbTable')}';
+
+    async function loadFromSupabase() {
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + TABLE + '?order=scraped_at.desc&limit=20', {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY
+          }
+        });
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) {
+          renderPosts(data.map(row => ({
+            link:     row.link,
+            avatar:   row.avatar,
+            author:   row.author,
+            badge:    row.badge,
+            timeText: row.time_text,
+            title:    row.title,
+            body:     row.body,
+            likes:    row.likes,
+            comments: row.comments
+          })));
+        }
+      } catch (e) {
+        console.error('Supabase load error:', e);
+      }
+    }
+
+    function renderPosts(posts) {
+      const feed  = document.getElementById('posts-feed');
+      const count = document.getElementById('post-count');
+      if (!posts.length) {
+        feed.innerHTML = '<div class="empty-state">No posts yet — check back soon</div>';
+        count.textContent = '0 ENTRIES';
+        return;
+      }
+      count.textContent = posts.length + (posts.length === 1 ? ' ENTRY' : ' ENTRIES');
+      const cards = posts.map(p => \`
+        <a class="post-card" href="\${p.link || '#'}" target="_blank">
+          <div class="post-card-top">
+            <div class="avatar">
+              \${p.avatar ? '<img src="' + p.avatar + '" alt="' + p.author + '" />' : (p.author?.[0] || 'Z').toUpperCase()}
+            </div>
+            <div>
+              <div class="post-author">\${p.author || ''}\${p.badge ? ' · ' + p.badge : ''}</div>
+              <div class="post-time">\${p.timeText || ''}</div>
+            </div>
+          </div>
+          \${p.title ? '<div class="post-title">' + p.title + '</div>' : ''}
+          \${p.body  ? '<div class="post-preview">' + p.body.slice(0, 100) + '...</div>' : ''}
+          <div class="post-footer">
+            <div class="post-read">Read Post</div>
+            <div class="post-stats">
+              <div class="stat likes">♥ \${p.likes || 0}</div>
+              <div class="stat comments">💬 \${p.comments || 0}</div>
+            </div>
+          </div>
+        </a>
+      \`).join('');
+      const shouldLoop = posts.length >= 3;
+      feed.innerHTML = shouldLoop ? cards + cards : cards;
+      if (shouldLoop) {
+        const totalWidth = posts.length * 252;
+        feed.style.setProperty('--scroll-distance', '-' + totalWidth + 'px');
+        feed.style.setProperty('--scroll-duration', posts.length * 4 + 's');
+        feed.classList.add('animated');
+      }
+    }
+
+    loadFromSupabase();
+
+  <\/script>
+
+</body>
+</html>`;
+    }
+
+    // ── DEBOUNCE RENDER ───────────────────────────────────────────
+    let timer = null;
+    function debounce(){ clearTimeout(timer); timer = setTimeout(render, 400); }
+
+    function render(){
+      const html = generateHTML();
+      const iframe = document.getElementById('preview');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open(); doc.write(html); doc.close();
+    }
+
+    // ── COPY ──────────────────────────────────────────────────────
+    function copyHTML(){
+      const btn = document.getElementById('copyBtn');
+      navigator.clipboard.writeText(generateHTML()).then(()=>{
+        btn.textContent = '✓ Copied!';
+        btn.classList.add('success');
+        setTimeout(()=>{ btn.textContent = 'Copy HTML'; btn.classList.remove('success'); }, 2000);
+      });
+    }
+
+    // ── DOWNLOAD ──────────────────────────────────────────────────
+    function downloadHTML(){
+      const name = (v('siteName') || 'zetsu-site').toLowerCase().replace(/\s+/g, '-') + '.html';
+      const blob = new Blob([generateHTML()], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+    }
+
+    // ── INIT ──────────────────────────────────────────────────────
+    render();
+
+  </script>
+</body>
+</html>
